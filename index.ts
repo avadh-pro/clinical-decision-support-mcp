@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as tools from "./tools";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express";

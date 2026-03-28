@@ -1,13 +1,22 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 class ClaudeService {
-  private client: Anthropic;
-  private model: string;
+  private client: Anthropic | null = null;
+  private model: string | null = null;
   private maxRetries: number = 3;
 
-  constructor() {
-    this.client = new Anthropic(); // Uses ANTHROPIC_API_KEY env var
-    this.model = process.env["CLAUDE_MODEL"] || "claude-sonnet-4-6-20250514";
+  private getClient(): Anthropic {
+    if (!this.client) {
+      this.client = new Anthropic(); // Reads ANTHROPIC_API_KEY at first use
+    }
+    return this.client;
+  }
+
+  private getModel(): string {
+    if (!this.model) {
+      this.model = process.env["CLAUDE_MODEL"] || "claude-sonnet-4-6-20250514";
+    }
+    return this.model;
   }
 
   async analyze(systemPrompt: string, userPrompt: string): Promise<string> {
@@ -15,8 +24,8 @@ class ClaudeService {
 
     for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       try {
-        const response = await this.client.messages.create({
-          model: this.model,
+        const response = await this.getClient().messages.create({
+          model: this.getModel(),
           max_tokens: 4096,
           system: systemPrompt,
           messages: [{ role: "user", content: userPrompt }],
@@ -42,7 +51,7 @@ class ClaudeService {
           break;
         }
 
-        const delayMs = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+        const delayMs = Math.pow(2, attempt) * 1000;
         console.warn(
           `Claude API attempt ${attempt + 1} failed, retrying in ${delayMs}ms:`,
           lastError.message,
@@ -57,14 +66,12 @@ class ClaudeService {
   }
 
   parseJSON<T>(response: string): T | null {
-    // Try direct JSON.parse
     try {
       return JSON.parse(response) as T;
     } catch {
-      // Ignore and try extracting from code fences
+      // Try extracting from code fences
     }
 
-    // Try extracting from ```json ... ``` blocks
     const jsonMatch = response.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
     if (jsonMatch && jsonMatch[1]) {
       try {
