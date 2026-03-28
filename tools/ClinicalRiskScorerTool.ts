@@ -90,7 +90,11 @@ function patientHasCondition(
         return true;
     }
     const text = (c.code?.text ?? "").toLowerCase();
-    return target.keywords.some((kw) => text.includes(kw));
+    return target.keywords.some((kw) => {
+      // Use word boundary matching to avoid partial matches (e.g., "dementia" matching "tia")
+      const regex = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+      return regex.test(text);
+    });
   });
 }
 
