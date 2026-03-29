@@ -57,7 +57,7 @@ class PatientSummaryGeneratorTool implements IMcpTool {
             .string()
             .optional()
             .describe(
-              "Patient ID. Optional if patient context exists.",
+              "The patient ID. Do NOT provide this parameter — it is automatically resolved from the patient context. Only provide if explicitly given a specific patient ID.",
             ),
         },
       },

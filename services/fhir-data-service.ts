@@ -1,15 +1,18 @@
 import { Request } from "express";
 import { FhirClientInstance } from "../fhir-client";
 import { FhirUtilities } from "../fhir-utilities";
-import { NullUtilities } from "../null-utilities";
+
 import { fhirR4 } from "@smile-cdr/fhirts";
 
 class FhirDataService {
-  // Get patient ID from context or throw
+  // Get patient ID — prefer SHARP header context over provided argument
+  // (the agent LLM may hallucinate fake patient IDs, but the platform
+  // always sends the real patient ID via x-patient-id header)
   getPatientId(req: Request, providedId?: string): string {
+    const contextId = FhirUtilities.getPatientIdIfContextExists(req);
+    if (contextId) return contextId;
     if (providedId) return providedId;
-    return NullUtilities.getOrThrow(
-      FhirUtilities.getPatientIdIfContextExists(req),
+    throw new Error(
       "No patient ID provided and no patient context available",
     );
   }
