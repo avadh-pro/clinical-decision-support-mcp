@@ -14,6 +14,10 @@ switch (env) {
     allowedHosts.push("ts.fhir-mcp.dev.promptopinion.ai");
     break;
   case "prod":
+    // In production, allow the Render hostname and Prompt Opinion platform
+    if (process.env["RENDER_EXTERNAL_HOSTNAME"]) {
+      allowedHosts.push(process.env["RENDER_EXTERNAL_HOSTNAME"]);
+    }
     allowedHosts.push("ts.fhir-mcp.promptopinion.ai");
     break;
   default:
@@ -31,6 +35,10 @@ app.use(cors());
 
 app.get("/hello-world", async (_, res) => {
   res.send("Hello World");
+});
+
+app.get("/health", async (_, res) => {
+  res.json({ status: "ok", server: "Clinical Decision Support MCP Server" });
 });
 
 app.post("/mcp", async (req, res) => {
