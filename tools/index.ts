@@ -5,6 +5,7 @@ import { DrugInteractionCheckerToolInstance } from "./DrugInteractionCheckerTool
 import { LabResultInterpreterToolInstance } from "./LabResultInterpreterTool";
 import { ClinicalRiskScorerToolInstance } from "./ClinicalRiskScorerTool";
 import { CarePlanSuggesterToolInstance } from "./CarePlanSuggesterTool";
+import { ParseClinicalNotesToolInstance } from "./ParseClinicalNotesTool";
 
 export {
   PatientAgeToolInstance,
@@ -14,4 +15,5 @@ export {
   LabResultInterpreterToolInstance,
   ClinicalRiskScorerToolInstance,
   CarePlanSuggesterToolInstance,
+  ParseClinicalNotesToolInstance,
 };

@@ -1,0 +1,2603 @@
+{
+  "resourceType": "Bundle",
+  "id": "demo-margaret-chen-bundle",
+  "type": "transaction",
+  "timestamp": "2026-03-29T10:00:00Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "demo-margaret-chen",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "usual",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ]
+            },
+            "system": "http://hospital.example.org/mrn",
+            "value": "MCH-2024-1234"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "use": "official",
+            "family": "Chen",
+            "given": ["Margaret"],
+            "prefix": ["Mrs."]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "555-234-5678",
+            "use": "home"
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1958-11-15",
+        "address": [
+          {
+            "use": "home",
+            "type": "physical",
+            "line": ["42 Oak Street"],
+            "city": "Boston",
+            "state": "MA",
+            "postalCode": "02108",
+            "country": "US"
+          }
+        ],
+        "maritalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+              "code": "M",
+              "display": "Married"
+            }
+          ]
+        },
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "system": "urn:ietf:bcp:47",
+                  "code": "en-US",
+                  "display": "English (United States)"
+                }
+              ]
+            },
+            "preferred": true
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Patient"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-afib",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "severity": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "24484000",
+              "display": "Severe"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "49436004",
+              "display": "Atrial fibrillation"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I48.91",
+              "display": "Unspecified atrial fibrillation"
+            }
+          ],
+          "text": "Atrial Fibrillation"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2020-03-15",
+        "recordedDate": "2020-03-15"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-diabetes",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Type 2 diabetes mellitus"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ],
+          "text": "Type 2 Diabetes Mellitus"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2015-06-20",
+        "recordedDate": "2015-06-20"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-hypertension",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Hypertensive disorder"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I10",
+              "display": "Essential (primary) hypertension"
+            }
+          ],
+          "text": "Hypertension"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2012-08-10",
+        "recordedDate": "2012-08-10"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000004",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-ckd3",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "433144002",
+              "display": "Chronic kidney disease stage 3"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "N18.3",
+              "display": "Chronic kidney disease, stage 3 (moderate)"
+            }
+          ],
+          "text": "Chronic Kidney Disease Stage 3"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2021-01-05",
+        "recordedDate": "2021-01-05"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000005",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-hyperlipidemia",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "55822004",
+              "display": "Hyperlipidemia"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E78.5",
+              "display": "Hyperlipidemia, unspecified"
+            }
+          ],
+          "text": "Hyperlipidemia"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2013-04-22",
+        "recordedDate": "2013-04-22"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b1000001-0000-0000-0000-000000000006",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-hfref",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "severity": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "24484000",
+              "display": "Severe"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "84114007",
+              "display": "Heart failure"
+            },
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I50.20",
+              "display": "Unspecified systolic (congestive) heart failure"
+            }
+          ],
+          "text": "Heart Failure with Reduced Ejection Fraction (HFrEF)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "onsetDateTime": "2022-09-01",
+        "recordedDate": "2022-09-01",
+        "note": [
+          {
+            "text": "Ejection fraction 30% on last echocardiogram (2026-02-10). NYHA Class III."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Condition"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-warfarin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "855332",
+              "display": "Warfarin Sodium 5 MG Oral Tablet"
+            }
+          ],
+          "text": "Warfarin 5mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2020-04-01",
+        "requester": {
+          "display": "Dr. James Wilson, Cardiologist"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-afib",
+            "display": "Atrial Fibrillation"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 5mg by mouth once daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 5,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "note": [
+          {
+            "text": "Monitor INR regularly. Target INR 2.0-3.0 for atrial fibrillation. CAUTION: Patient also on aspirin — increased bleeding risk."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-metformin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "861004",
+              "display": "Metformin hydrochloride 1000 MG Oral Tablet"
+            }
+          ],
+          "text": "Metformin 1000mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2015-07-01",
+        "requester": {
+          "display": "Dr. Sarah Park, Primary Care"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-diabetes",
+            "display": "Type 2 Diabetes Mellitus"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 1000mg by mouth twice daily with meals",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 1000,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "note": [
+          {
+            "text": "WARNING: Patient has CKD Stage 3 with eGFR 38 mL/min. Metformin dose should be reviewed — risk of lactic acidosis with eGFR <45. Consider dose reduction to 500mg BID or discontinuation."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-lisinopril",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "314076",
+              "display": "Lisinopril 20 MG Oral Tablet"
+            }
+          ],
+          "text": "Lisinopril 20mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2012-09-01",
+        "requester": {
+          "display": "Dr. Sarah Park, Primary Care"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-hypertension",
+            "display": "Hypertension"
+          },
+          {
+            "reference": "Condition/condition-ckd3",
+            "display": "Chronic Kidney Disease Stage 3"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 20mg by mouth once daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "note": [
+          {
+            "text": "Monitor potassium and creatinine. Note: Potassium currently elevated at 5.3 mEq/L — ACE inhibitor may be contributing."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000004",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-atorvastatin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "259255",
+              "display": "Atorvastatin 40 MG Oral Tablet"
+            }
+          ],
+          "text": "Atorvastatin 40mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2013-05-15",
+        "requester": {
+          "display": "Dr. Sarah Park, Primary Care"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-hyperlipidemia",
+            "display": "Hyperlipidemia"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 40mg by mouth once daily at bedtime",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 40,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000005",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-carvedilol",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "200031",
+              "display": "Carvedilol 25 MG Oral Tablet"
+            }
+          ],
+          "text": "Carvedilol 25mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2022-09-15",
+        "requester": {
+          "display": "Dr. James Wilson, Cardiologist"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-hfref",
+            "display": "Heart Failure with Reduced Ejection Fraction"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 25mg by mouth twice daily with food",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 25,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000006",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-furosemide",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "310429",
+              "display": "Furosemide 40 MG Oral Tablet"
+            }
+          ],
+          "text": "Furosemide 40mg tablet"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2022-09-15",
+        "requester": {
+          "display": "Dr. James Wilson, Cardiologist"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-hfref",
+            "display": "Heart Failure with Reduced Ejection Fraction"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 40mg by mouth once daily in the morning",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 40,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000007",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-aspirin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "243670",
+              "display": "Aspirin 81 MG Oral Tablet"
+            }
+          ],
+          "text": "Aspirin 81mg tablet (low-dose)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2020-04-01",
+        "requester": {
+          "display": "Dr. James Wilson, Cardiologist"
+        },
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "49436004",
+                "display": "Atrial fibrillation"
+              }
+            ],
+            "text": "Cardiovascular prevention"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 81mg by mouth once daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 81,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ],
+        "note": [
+          {
+            "text": "MAJOR INTERACTION: Concurrent use with Warfarin significantly increases bleeding risk. Dual antiplatelet/anticoagulant therapy should be reviewed."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c1000001-0000-0000-0000-000000000008",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-omeprazole",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+          ]
+        },
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "198053",
+              "display": "Omeprazole 20 MG Delayed Release Oral Capsule"
+            }
+          ],
+          "text": "Omeprazole 20mg capsule"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "authoredOn": "2020-04-15",
+        "requester": {
+          "display": "Dr. Sarah Park, Primary Care"
+        },
+        "reasonCode": [
+          {
+            "text": "GI protection due to concurrent aspirin and warfarin use"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "sequence": 1,
+            "text": "Take 20mg by mouth once daily before breakfast",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "MedicationRequest"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-sodium",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2951-2",
+              "display": "Sodium [Moles/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Sodium"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 133,
+          "unit": "mEq/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "meq/L"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "L",
+                "display": "Low"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 136,
+              "unit": "mEq/L",
+              "system": "http://unitsofmeasure.org",
+              "code": "meq/L"
+            },
+            "high": {
+              "value": 145,
+              "unit": "mEq/L",
+              "system": "http://unitsofmeasure.org",
+              "code": "meq/L"
+            },
+            "text": "136-145 mEq/L"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-potassium",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2823-3",
+              "display": "Potassium [Moles/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Potassium"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 5.3,
+          "unit": "mEq/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "meq/L"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 3.5,
+              "unit": "mEq/L",
+              "system": "http://unitsofmeasure.org",
+              "code": "meq/L"
+            },
+            "high": {
+              "value": 5.0,
+              "unit": "mEq/L",
+              "system": "http://unitsofmeasure.org",
+              "code": "meq/L"
+            },
+            "text": "3.5-5.0 mEq/L"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-creatinine",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2160-0",
+              "display": "Creatinine [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Creatinine"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 1.8,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.7,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "high": {
+              "value": 1.3,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "text": "0.7-1.3 mg/dL"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000004",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-bun",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "3094-0",
+              "display": "Urea nitrogen [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Blood Urea Nitrogen (BUN)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 32,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 7,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "high": {
+              "value": 20,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "text": "7-20 mg/dL"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000005",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-hemoglobin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "718-7",
+              "display": "Hemoglobin [Mass/volume] in Blood"
+            }
+          ],
+          "text": "Hemoglobin"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 10.2,
+          "unit": "g/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "g/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "L",
+                "display": "Low"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 12.0,
+              "unit": "g/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "g/dL"
+            },
+            "high": {
+              "value": 17.5,
+              "unit": "g/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "g/dL"
+            },
+            "text": "12.0-17.5 g/dL"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000006",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-hba1c",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ],
+          "text": "Hemoglobin A1c (HbA1c)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-01-20T09:00:00Z",
+        "issued": "2026-01-20T14:00:00Z",
+        "valueQuantity": {
+          "value": 7.8,
+          "unit": "%",
+          "system": "http://unitsofmeasure.org",
+          "code": "%"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "high": {
+              "value": 7.0,
+              "unit": "%",
+              "system": "http://unitsofmeasure.org",
+              "code": "%"
+            },
+            "text": "Target <7.0% for diabetic patients"
+          }
+        ],
+        "note": [
+          {
+            "text": "Above target. Diabetes management needs optimization. Consider medication adjustment given CKD constraints."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000007",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-inr",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "6301-6",
+              "display": "INR in Platelet poor plasma by Coagulation assay"
+            }
+          ],
+          "text": "INR (International Normalized Ratio)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-03-01T08:00:00Z",
+        "issued": "2026-03-01T10:00:00Z",
+        "valueQuantity": {
+          "value": 3.2,
+          "unit": "{INR}",
+          "system": "http://unitsofmeasure.org",
+          "code": "{INR}"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2.0,
+              "unit": "{INR}",
+              "system": "http://unitsofmeasure.org",
+              "code": "{INR}"
+            },
+            "high": {
+              "value": 3.0,
+              "unit": "{INR}",
+              "system": "http://unitsofmeasure.org",
+              "code": "{INR}"
+            },
+            "text": "Therapeutic range 2.0-3.0 for atrial fibrillation"
+          }
+        ],
+        "note": [
+          {
+            "text": "Supratherapeutic INR. Increased bleeding risk, especially with concurrent aspirin. Consider warfarin dose adjustment."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000008",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-bilirubin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1975-2",
+              "display": "Bilirubin.total [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Total Bilirubin"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 0.9,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "N",
+                "display": "Normal"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.1,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "high": {
+              "value": 1.2,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "text": "0.1-1.2 mg/dL"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000009",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-glucose-fasting",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2345-7",
+              "display": "Glucose [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Glucose (Fasting)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 156,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 70,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "high": {
+              "value": 100,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "text": "70-100 mg/dL (fasting)"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000010",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-egfr",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "33914-3",
+              "display": "Glomerular filtration rate/1.73 sq M.predicted [Volume Rate/Area] in Serum or Plasma by Creatinine-based formula (MDRD)"
+            }
+          ],
+          "text": "Estimated GFR (eGFR)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-02-15T08:30:00Z",
+        "issued": "2026-02-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 38,
+          "unit": "mL/min/{1.73_m2}",
+          "system": "http://unitsofmeasure.org",
+          "code": "mL/min/{1.73_m2}"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "L",
+                "display": "Low"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 90,
+              "unit": "mL/min/{1.73_m2}",
+              "system": "http://unitsofmeasure.org",
+              "code": "mL/min/{1.73_m2}"
+            },
+            "text": ">90 mL/min/1.73m2 (normal)"
+          }
+        ],
+        "note": [
+          {
+            "text": "eGFR 38 mL/min indicates CKD Stage 3b (30-44). Metformin dose adjustment required. Renal dosing review recommended for all medications."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000011",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-bnp",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "42637-9",
+              "display": "Natriuretic peptide B [Mass/volume] in Blood"
+            }
+          ],
+          "text": "B-type Natriuretic Peptide (BNP)"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-03-01T08:00:00Z",
+        "issued": "2026-03-01T10:00:00Z",
+        "valueQuantity": {
+          "value": 450,
+          "unit": "pg/mL",
+          "system": "http://unitsofmeasure.org",
+          "code": "pg/mL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "high": {
+              "value": 100,
+              "unit": "pg/mL",
+              "system": "http://unitsofmeasure.org",
+              "code": "pg/mL"
+            },
+            "text": "<100 pg/mL (heart failure unlikely if <100)"
+          }
+        ],
+        "note": [
+          {
+            "text": "Significantly elevated BNP consistent with active heart failure. Correlate with clinical symptoms and volume status."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000012",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-ldl",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2089-1",
+              "display": "Cholesterol in LDL [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "LDL Cholesterol"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "effectiveDateTime": "2026-01-20T09:00:00Z",
+        "issued": "2026-01-20T14:00:00Z",
+        "valueQuantity": {
+          "value": 98,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "N",
+                "display": "Normal"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "high": {
+              "value": 100,
+              "unit": "mg/dL",
+              "system": "http://unitsofmeasure.org",
+              "code": "mg/dL"
+            },
+            "text": "<100 mg/dL (optimal for high-risk cardiac patients; target <70 for very high risk)"
+          }
+        ],
+        "note": [
+          {
+            "text": "Near goal but given ASCVD risk factors (diabetes, CKD, HF), a target of <70 mg/dL may be more appropriate. Consider statin intensification."
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Observation"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "allergy-penicillin",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "type": "allergy",
+        "category": ["medication"],
+        "criticality": "low",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "7980",
+              "display": "Penicillin"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "91936005",
+              "display": "Allergy to penicillin"
+            }
+          ],
+          "text": "Penicillin"
+        },
+        "patient": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "recordedDate": "2005-03-10",
+        "reaction": [
+          {
+            "substance": {
+              "coding": [
+                {
+                  "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                  "code": "7980",
+                  "display": "Penicillin"
+                }
+              ]
+            },
+            "manifestation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "271807003",
+                    "display": "Eruption of skin"
+                  }
+                ],
+                "text": "Rash"
+              }
+            ],
+            "severity": "moderate"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "AllergyIntolerance"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "allergy-sulfonamides",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "type": "allergy",
+        "category": ["medication"],
+        "criticality": "high",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "10831",
+              "display": "Sulfonamide"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "294499007",
+              "display": "Allergy to sulfonamide"
+            }
+          ],
+          "text": "Sulfonamides"
+        },
+        "patient": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "recordedDate": "2010-07-22",
+        "reaction": [
+          {
+            "substance": {
+              "coding": [
+                {
+                  "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                  "code": "10831",
+                  "display": "Sulfonamide"
+                }
+              ]
+            },
+            "manifestation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "39579001",
+                    "display": "Anaphylaxis"
+                  }
+                ],
+                "text": "Anaphylaxis"
+              }
+            ],
+            "severity": "severe"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "AllergyIntolerance"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "allergy-iodine-contrast",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-allergyintolerance"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "type": "allergy",
+        "category": ["environment"],
+        "criticality": "low",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "293637006",
+              "display": "Allergy to iodine"
+            }
+          ],
+          "text": "Iodine contrast dye"
+        },
+        "patient": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "recordedDate": "2018-11-05",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "126485001",
+                    "display": "Urticaria"
+                  }
+                ],
+                "text": "Hives"
+              }
+            ],
+            "severity": "mild"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "AllergyIntolerance"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:f1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "encounter-ed-hf-exacerbation",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "EMER",
+          "display": "emergency"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "4525004",
+                "display": "Emergency department patient visit"
+              }
+            ],
+            "text": "Emergency Department Visit"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "period": {
+          "start": "2026-02-10T14:30:00Z",
+          "end": "2026-02-11T22:00:00Z"
+        },
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "56675007",
+                "display": "Acute heart failure"
+              }
+            ],
+            "text": "Acute heart failure exacerbation"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "reference": "Condition/condition-hfref",
+              "display": "Heart Failure with Reduced Ejection Fraction"
+            },
+            "use": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+                  "code": "AD",
+                  "display": "Admission diagnosis"
+                }
+              ]
+            },
+            "rank": 1
+          }
+        ],
+        "hospitalization": {
+          "dischargeDisposition": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/discharge-disposition",
+                "code": "home",
+                "display": "Home"
+              }
+            ],
+            "text": "Discharged to home with follow-up"
+          }
+        },
+        "location": [
+          {
+            "location": {
+              "display": "Boston General Hospital — Emergency Department"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Encounter"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:f1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "encounter-cardiology-followup",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "185349003",
+                "display": "Encounter for check up"
+              }
+            ],
+            "text": "Outpatient Cardiology Follow-up"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "participant": [
+          {
+            "individual": {
+              "display": "Dr. James Wilson, Cardiologist"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-03-01T10:00:00Z",
+          "end": "2026-03-01T10:45:00Z"
+        },
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "394579002",
+                "display": "Cardiology"
+              }
+            ],
+            "text": "Cardiology follow-up — post-ED discharge for heart failure management, INR monitoring, medication review"
+          }
+        ],
+        "location": [
+          {
+            "location": {
+              "display": "Boston Cardiology Associates"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Encounter"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:f1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "encounter-pcp-diabetes",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "185349003",
+                "display": "Encounter for check up"
+              }
+            ],
+            "text": "Primary Care Visit"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "participant": [
+          {
+            "individual": {
+              "display": "Dr. Sarah Park, Primary Care"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-01-20T09:00:00Z",
+          "end": "2026-01-20T09:30:00Z"
+        },
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "44054006",
+                "display": "Type 2 diabetes mellitus"
+              }
+            ],
+            "text": "Diabetes management — HbA1c review, medication adjustment discussion"
+          }
+        ],
+        "location": [
+          {
+            "location": {
+              "display": "Boston Primary Care Clinic"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "Encounter"
+      }
+    }
+  ]
+}

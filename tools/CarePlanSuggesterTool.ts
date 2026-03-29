@@ -194,9 +194,45 @@ class CarePlanSuggesterTool implements IMcpTool {
           }
 
           if (conditions.length === 0) {
-            return ResponseFormatter.success(
-              "# Care Plan Recommendations\n\nNo active conditions found for this patient. Care plan suggestions require at least one documented condition.",
-            );
+            const ageInfo = age !== null ? ` (age ${age})` : "";
+            const preventiveSuggestions: string[] = [
+              `# Care Plan Recommendations`,
+              ``,
+              `No active conditions found for this patient${ageInfo}. Below are age-appropriate preventive care suggestions:`,
+              ``,
+              `## Preventive Care Recommendations`,
+              ``,
+            ];
+
+            if (age !== null && age >= 50) {
+              preventiveSuggestions.push(`- **Colorectal cancer screening** — recommended starting at age 45-50 (colonoscopy every 10 years or annual FIT)`);
+              preventiveSuggestions.push(`- **Cardiovascular risk assessment** — lipid panel and blood pressure screening`);
+            }
+            if (age !== null && age >= 65) {
+              preventiveSuggestions.push(`- **Pneumococcal vaccination** — PCV20 or PCV15 followed by PPSV23`);
+              preventiveSuggestions.push(`- **Bone density screening** — DEXA scan recommended for women 65+ and men 70+`);
+              preventiveSuggestions.push(`- **Fall risk assessment** — annual screening recommended`);
+            }
+            if (age !== null && age >= 18) {
+              preventiveSuggestions.push(`- **Annual wellness visit** — comprehensive health assessment and immunization review`);
+              preventiveSuggestions.push(`- **Depression screening** — PHQ-2/PHQ-9 recommended annually`);
+              preventiveSuggestions.push(`- **Blood pressure screening** — at least annually for adults`);
+            }
+            if (sex === "female" && age !== null) {
+              if (age >= 21 && age <= 65) {
+                preventiveSuggestions.push(`- **Cervical cancer screening** — Pap smear every 3 years or co-testing every 5 years`);
+              }
+              if (age >= 40) {
+                preventiveSuggestions.push(`- **Mammography** — breast cancer screening every 1-2 years`);
+              }
+            }
+            if (age === null) {
+              preventiveSuggestions.push(`- **Annual wellness visit** — comprehensive health assessment and immunization review`);
+              preventiveSuggestions.push(`- **Age-appropriate cancer screenings** — discuss with provider based on risk factors`);
+              preventiveSuggestions.push(`- **Cardiovascular risk assessment** — lipid panel and blood pressure screening`);
+            }
+
+            return ResponseFormatter.success(preventiveSuggestions.join("\n"));
           }
 
           // 5. Extract medications

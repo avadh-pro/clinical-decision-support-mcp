@@ -448,8 +448,8 @@ class LabResultInterpreterTool implements IMcpTool {
 
           // No results found
           if (labResults.length === 0) {
-            return ResponseFormatter.error(
-              `No laboratory results found in the last ${daysBack} days.`,
+            return ResponseFormatter.success(
+              `# Laboratory Results Interpretation\n\nNo laboratory results found in the last ${daysBack} days. Consider ordering baseline labs.`,
             );
           }
 
