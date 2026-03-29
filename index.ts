@@ -6,27 +6,11 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { IMcpTool } from "./IMcpTool";
 import cors from "cors";
 
-const env = process.env["PO_ENV"]?.toString();
-const allowedHosts: string[] = [];
-
-switch (env) {
-  case "dev":
-    allowedHosts.push("ts.fhir-mcp.dev.promptopinion.ai");
-    break;
-  case "prod":
-    // In production, allow the Render hostname and Prompt Opinion platform
-    if (process.env["RENDER_EXTERNAL_HOSTNAME"]) {
-      allowedHosts.push(process.env["RENDER_EXTERNAL_HOSTNAME"]);
-    }
-    allowedHosts.push("ts.fhir-mcp.promptopinion.ai");
-    break;
-  default:
-    allowedHosts.push("localhost");
-}
-
+// Bind to all interfaces. No allowedHosts restriction — the MCP server is stateless
+// and authenticated via SHARP headers, so host-based filtering adds no security value
+// and breaks tunnels, proxies, and cloud deployments.
 const app = createMcpExpressApp({
   host: "0.0.0.0",
-  allowedHosts,
 });
 
 const port = process.env["PORT"] || 5000;
