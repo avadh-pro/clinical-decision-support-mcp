@@ -25,7 +25,22 @@ app.get("/health", async (_, res) => {
   res.json({ status: "ok", server: "Clinical Decision Support MCP Server" });
 });
 
+// Debug endpoint — shows what headers the last MCP request received
+let lastMcpHeaders: Record<string, string | string[] | undefined> = {};
+app.get("/debug/headers", async (_, res) => {
+  res.json({ lastMcpHeaders });
+});
+
 app.post("/mcp", async (req, res) => {
+  // Log SHARP headers for debugging
+  lastMcpHeaders = {
+    "x-fhir-server-url": req.headers["x-fhir-server-url"],
+    "x-fhir-access-token": req.headers["x-fhir-access-token"] ? "[PRESENT]" : undefined,
+    "x-patient-id": req.headers["x-patient-id"],
+    "content-type": req.headers["content-type"],
+    "host": req.headers["host"],
+  };
+  console.log("MCP request SHARP headers:", JSON.stringify(lastMcpHeaders));
   try {
     const server = new McpServer(
       {
