@@ -8,18 +8,18 @@
   },
   "scripts": {
     "start": "npx tsx index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --import tsx --test tests/**/*.test.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/darena-solutions/darena-health-community-mcp.git"
+    "url": "git+https://github.com/avadh-pro/clinical-decision-support-mcp.git"
   },
-  "author": "Darena Solutions",
+  "author": "Avadh Dobariya",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/darena-solutions/darena-health-community-mcp/issues"
+    "url": "https://github.com/avadh-pro/clinical-decision-support-mcp/issues"
   },
-  "homepage": "https://github.com/darena-solutions/darena-health-community-mcp#readme",
+  "homepage": "https://github.com/avadh-pro/clinical-decision-support-mcp#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/cors": "^2.8.19",

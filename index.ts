@@ -25,22 +25,7 @@ app.get("/health", async (_, res) => {
   res.json({ status: "ok", server: "Clinical Decision Support MCP Server" });
 });
 
-// Debug endpoint — shows what headers the last MCP request received
-let lastMcpHeaders: Record<string, string | string[] | undefined> = {};
-app.get("/debug/headers", async (_, res) => {
-  res.json({ lastMcpHeaders });
-});
-
 app.post("/mcp", async (req, res) => {
-  // Log SHARP headers for debugging
-  lastMcpHeaders = {
-    "x-fhir-server-url": req.headers["x-fhir-server-url"],
-    "x-fhir-access-token": req.headers["x-fhir-access-token"] ? "[PRESENT]" : undefined,
-    "x-patient-id": req.headers["x-patient-id"],
-    "content-type": req.headers["content-type"],
-    "host": req.headers["host"],
-  };
-  console.log("MCP request SHARP headers:", JSON.stringify(lastMcpHeaders));
   try {
     const server = new McpServer(
       {
@@ -92,4 +77,18 @@ app.post("/mcp", async (req, res) => {
 
 app.listen(port, () => {
   console.log(`MCP server listening on port ${port}`);
+
+  // Keep-alive: self-ping every 4 minutes to prevent Render cold starts (50s spin-up)
+  const keepAliveUrl = process.env["RENDER_EXTERNAL_URL"];
+  if (keepAliveUrl) {
+    const FOUR_MINUTES = 4 * 60 * 1000;
+    setInterval(async () => {
+      try {
+        await fetch(`${keepAliveUrl}/health`);
+        console.log("Keep-alive ping sent");
+      } catch {
+        console.warn("Keep-alive ping failed");
+      }
+    }, FOUR_MINUTES);
+  }
 });

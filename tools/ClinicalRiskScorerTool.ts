@@ -698,4 +698,7 @@ ${scoreSummary}`,
   }
 }
 
+// Exported for testing
+export { calculateCHA2DS2VASc, calculateHEART, calculateMELD, patientHasCondition, getMostRecentLab };
+
 export const ClinicalRiskScorerToolInstance = new ClinicalRiskScorerTool();

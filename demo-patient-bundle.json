@@ -2598,6 +2598,126 @@
         "method": "POST",
         "url": "Encounter"
       }
+    },
+    {
+      "fullUrl": "urn:uuid:d1a2b3c4-e5f6-7890-abcd-ef1234567890",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-discharge-summary-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "18842-5",
+              "display": "Discharge Summary"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen"
+        },
+        "date": "2026-03-15",
+        "author": [
+          {
+            "display": "Dr. Sarah Williams"
+          }
+        ],
+        "description": "Discharge summary for atrial fibrillation with rapid ventricular response admission",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "RElTQ0hBUkdFIFNVTU1BUlkKUGF0aWVudDogTWFyZ2FyZXQgQ2hlbiB8IE1STjogTUNILTIwMjQtMTIzNApEYXRlOiAyMDI2LTAzLTE1IHwgQXR0ZW5kaW5nOiBEci4gU2FyYWggV2lsbGlhbXMsIEludGVybmFsIE1lZGljaW5lCgpBRE1JU1NJT04gRElBR05PU0lTOiBBdHJpYWwgZmlicmlsbGF0aW9uIHdpdGggcmFwaWQgdmVudHJpY3VsYXIgcmVzcG9uc2UKCkhPU1BJVEFMIENPVVJTRToKTXJzLiBDaGVuIHByZXNlbnRlZCB0byB0aGUgRUQgd2l0aCBwYWxwaXRhdGlvbnMgYW5kIHNob3J0bmVzcyBvZiBicmVhdGguIEVDRyBjb25maXJtZWQgYXRyaWFsIGZpYnJpbGxhdGlvbiB3aXRoIHZlbnRyaWN1bGFyIHJhdGUgb2YgMTQyIGJwbS4gU2hlIHdhcyBzdGFydGVkIG9uIElWIGRpbHRpYXplbSBkcmlwIHdpdGggc3VjY2Vzc2Z1bCByYXRlIGNvbnRyb2wgdG8gNzggYnBtIHdpdGhpbiA0IGhvdXJzLiBUcmFuc2l0aW9uZWQgdG8gb3JhbCBtZXRvcHJvbG9sIDUwbWcgQklELiBFY2hvY2FyZGlvZ3JhbSBzaG93ZWQgcHJlc2VydmVkIGVqZWN0aW9uIGZyYWN0aW9uIChFRiA1NSUpLCBtaWxkIGxlZnQgYXRyaWFsIGVubGFyZ2VtZW50LiBDSEEyRFMyLVZBU2Mgc2NvcmUgY2FsY3VsYXRlZCBhdCA0IChmZW1hbGUsIGFnZSA2NywgaHlwZXJ0ZW5zaW9uLCBkaWFiZXRlcykg4oCUIGFudGljb2FndWxhdGlvbiB3aXRoIGFwaXhhYmFuIDVtZyBCSUQgaW5pdGlhdGVkLgoKRElTQ0hBUkdFIE1FRElDQVRJT05TOgoxLiBNZXRvcHJvbG9sIHN1Y2NpbmF0ZSA1MG1nIFBPIGRhaWx5CjIuIEFwaXhhYmFuIDVtZyBQTyBCSUQKMy4gTWV0Zm9ybWluIDEwMDBtZyBQTyBCSUQgKGNvbnRpbnVlZCkKNC4gTGlzaW5vcHJpbCAyMG1nIFBPIGRhaWx5IChjb250aW51ZWQpCjUuIEF0b3J2YXN0YXRpbiA0MG1nIFBPIGRhaWx5IChjb250aW51ZWQpCgpGT0xMT1ctVVA6IENhcmRpb2xvZ3kgaW4gMiB3ZWVrcywgUENQIGluIDEgd2Vlay4gUmVwZWF0IEVDRyBpbiA0IHdlZWtzLgpESUVUOiBMb3cgc29kaXVtLCBkaWFiZXRpYyBkaWV0CkFDVElWSVRZOiBSZXN1bWUgbm9ybWFsIGFjdGl2aXR5LCBhdm9pZCBzdHJlbnVvdXMgZXhlcmNpc2UgZm9yIDEgd2Vlay4=",
+              "title": "Discharge Summary - Margaret Chen - 2026-03-15"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-discharge-summary-margaret"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a2b3c4d5-f6e7-8901-bcde-f12345678901",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-cardiology-consult-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11488-4",
+              "display": "Cardiology Consultation Note"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen"
+        },
+        "date": "2026-03-01",
+        "author": [
+          {
+            "display": "Dr. James Park"
+          }
+        ],
+        "description": "Cardiology consultation for evaluation of newly diagnosed atrial fibrillation",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "Q0FSRElPTE9HWSBDT05TVUxUQVRJT04KUGF0aWVudDogTWFyZ2FyZXQgQ2hlbiB8IERhdGU6IDIwMjYtMDMtMDEKQ2FyZGlvbG9naXN0OiBEci4gSmFtZXMgUGFyaywgTUQgRkFDQwoKUkVBU09OIEZPUiBDT05TVUxUQVRJT046IEV2YWx1YXRpb24gb2YgbmV3bHkgZGlhZ25vc2VkIGF0cmlhbCBmaWJyaWxsYXRpb24KCkhJU1RPUlk6IDY3LXllYXItb2xkIHdvbWFuIHdpdGggaGlzdG9yeSBvZiBoeXBlcnRlbnNpb24gKDE0IHllYXJzKSwgdHlwZSAyIGRpYWJldGVzICgxMSB5ZWFycyksIHJlZmVycmVkIGJ5IFBDUCBhZnRlciByb3V0aW5lIEVDRyBzaG93ZWQgYXRyaWFsIGZpYnJpbGxhdGlvbi4gUGF0aWVudCByZXBvcnRzIG9jY2FzaW9uYWwgcGFscGl0YXRpb25zIG92ZXIgcGFzdCAzIG1vbnRocywgbWlsZCBkeXNwbmVhIG9uIGV4ZXJ0aW9uIGNsaW1iaW5nIDIgZmxpZ2h0cyBvZiBzdGFpcnMuIE5vIHN5bmNvcGUsIG5vIGNoZXN0IHBhaW4sIG5vIHBlcmlwaGVyYWwgZWRlbWEuCgpFWEFNSU5BVElPTjoKLSBCUDogMTM4LzgyIG1tSGcsIEhSOiA5MiBicG0gKGlycmVndWxhciksIFJSOiAxNiwgU3BPMjogOTclCi0gQ2FyZGlhYzogSXJyZWd1bGFybHkgaXJyZWd1bGFyIHJoeXRobSwgbm8gbXVybXVycywgbm8gUzMvUzQKLSBMdW5nczogQ2xlYXIgYmlsYXRlcmFsbHkKLSBFeHRyZW1pdGllczogTm8gZWRlbWEsIHB1bHNlcyAyKyBiaWxhdGVyYWxseQoKQVNTRVNTTUVOVDoKMS4gTmV3LW9uc2V0IGF0cmlhbCBmaWJyaWxsYXRpb24sIHBhcm94eXNtYWwgdnMgcGVyc2lzdGVudCDigJQgcmVjb21tZW5kIEhvbHRlciBtb25pdG9yCjIuIENIQTJEUzItVkFTYyBzY29yZSA0IOKAlCBoaWdoIHN0cm9rZSByaXNrLCByZWNvbW1lbmQgYW50aWNvYWd1bGF0aW9uCjMuIEh5cGVydGVuc2lvbiDigJQgc3Vib3B0aW1hbGx5IGNvbnRyb2xsZWQsIGNvbnNpZGVyIGRvc2UgYWRqdXN0bWVudAo0LiBUeXBlIDIgZGlhYmV0ZXMg4oCUIEhiQTFjIDcuMiUsIHJlYXNvbmFibGUgY29udHJvbAoKUExBTjoKLSBTdGFydCBhcGl4YWJhbiA1bWcgQklEIGZvciBzdHJva2UgcHJldmVudGlvbgotIEhvbHRlciBtb25pdG9yIHggNDggaG91cnMKLSBFY2hvY2FyZGlvZ3JhbSB0byBhc3Nlc3MgY2FyZGlhYyBzdHJ1Y3R1cmUKLSBDb25zaWRlciByYXRlIGNvbnRyb2wgd2l0aCBiZXRhLWJsb2NrZXIgaWYgcGVyc2lzdGVudAotIEZvbGxvdy11cCBpbiAyIHdlZWtzIHBvc3QtSG9sdGVy",
+              "title": "Cardiology Consultation - Margaret Chen - 2026-03-01"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-cardiology-consult-margaret"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b3c4d5e6-a7f8-9012-cdef-012345678902",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-progress-note-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress Note"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen"
+        },
+        "date": "2026-02-15",
+        "author": [
+          {
+            "display": "Dr. Lisa Thompson"
+          }
+        ],
+        "description": "Primary care progress note for diabetes and hypertension follow-up",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "UFJJTUFSWSBDQVJFIFBST0dSRVNTIE5PVEUKUGF0aWVudDogTWFyZ2FyZXQgQ2hlbiB8IERhdGU6IDIwMjYtMDItMTUKUHJvdmlkZXI6IERyLiBMaXNhIFRob21wc29uLCBNRAoKU1VCSkVDVElWRTogTXJzLiBDaGVuIHByZXNlbnRzIGZvciByb3V0aW5lIGRpYWJldGVzIGFuZCBoeXBlcnRlbnNpb24gZm9sbG93LXVwLiBSZXBvcnRzIGdvb2QgbWVkaWNhdGlvbiBhZGhlcmVuY2UuIERlbmllcyBjaGVzdCBwYWluLCBzaG9ydG5lc3Mgb2YgYnJlYXRoIGF0IHJlc3QsIHZpc2lvbiBjaGFuZ2VzLCBvciBmb290IG51bWJuZXNzLiBOb3RlcyBvY2Nhc2lvbmFsIHBhbHBpdGF0aW9ucyBsYXN0aW5nIHNlY29uZHMsIHNlbGYtcmVzb2x2aW5nLiBNb25pdG9ycyBibG9vZCBnbHVjb3NlIGF0IGhvbWUsIGZhc3RpbmcgcmVhZGluZ3MgMTEwLTE0MCBtZy9kTC4KCk9CSkVDVElWRToKLSBWaXRhbHM6IEJQIDE0Mi84NiwgSFIgODggKGlycmVndWxhciBvbiBhdXNjdWx0YXRpb24pLCBCTUkgMjcuNAotIExhYnMgKDIwMjYtMDItMTApOiBIYkExYyA3LjIlLCBGYXN0aW5nIGdsdWNvc2UgMTI4LCBDcmVhdGluaW5lIDAuOSwgZUdGUiA+NjAsIFRvdGFsIGNob2xlc3Rlcm9sIDE5OCwgTERMIDExMiwgSERMIDUyLCBUcmlnbHljZXJpZGVzIDE2OAotIEZvb3QgZXhhbTogU2Vuc2F0aW9uIGludGFjdCwgbm8gbGVzaW9ucwotIEV5ZSBleGFtOiBSZWZlcnJlZCB0byBvcGh0aGFsbW9sb2d5LCBkdWUgZm9yIGRpbGF0ZWQgZXhhbQoKQVNTRVNTTUVOVC9QTEFOOgoxLiBUeXBlIDIgRGlhYmV0ZXMgKEUxMS45KSDigJQgSGJBMWMgNy4yJSwgYXQgZ29hbC4gQ29udGludWUgbWV0Zm9ybWluIDEwMDBtZyBCSUQuCjIuIEh5cGVydGVuc2lvbiAoSTEwKSDigJQgQlAgYWJvdmUgZ29hbCAxNDAvOTAuIEluY3JlYXNlIGxpc2lub3ByaWwgZnJvbSAxMG1nIHRvIDIwbWcgZGFpbHkuCjMuIElycmVndWxhciBoZWFydCByaHl0aG0gbm90ZWQg4oCUIE9SREVSOiAxMi1sZWFkIEVDRy4gSWYgQUZpYiBjb25maXJtZWQsIHJlZmVyIGNhcmRpb2xvZ3kuCjQuIEh5cGVybGlwaWRlbWlhIOKAlCBMREwgMTEyLCBhYm92ZSBnb2FsIGZvciBkaWFiZXRpYyBwYXRpZW50LiBTdGFydCBhdG9ydmFzdGF0aW4gNDBtZyBkYWlseS4KNS4gUHJldmVudGl2ZTogRmx1IHZhY2NpbmUgYWRtaW5pc3RlcmVkLiBDb2xvbiBjYW5jZXIgc2NyZWVuaW5nIHVwIHRvIGRhdGUu",
+              "title": "Primary Care Progress Note - Margaret Chen - 2026-02-15"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-progress-note-margaret"
+      }
     }
   ]
 }

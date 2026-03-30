@@ -4,6 +4,7 @@ import { FhirUtilities } from "./fhir-utilities";
 import { Request } from "express";
 import { FhirContext } from "./fhir-context";
 import { fhirR4 } from "@smile-cdr/fhirts";
+import { Config } from "./config";
 
 class FhirClient {
   async read<T extends DomainResource>(req: Request, path: string) {
@@ -40,6 +41,8 @@ class FhirClient {
         Authorization: `Bearer ${fhirContext.token}`,
       };
     }
+
+    config.timeout = Config.requestTimeoutMs;
 
     try {
       const response = await axios(config);
