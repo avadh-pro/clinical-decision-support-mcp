@@ -461,7 +461,7 @@ function formatCHA2DS2VASc(result: CHA2DS2VAScResult): string {
 function formatHEART(result: HEARTResult): string {
   let md = `### HEART Score: ${result.score}/${result.maxScore} — ${result.riskCategory}\n\n`;
   if (result.partial) {
-    md += `> **Partial Score:** History and ECG components are not available from FHIR data and are scored as 0. Actual score may be higher.\n\n`;
+    md += `> **⚠ Clinical Limitation:** This is a PARTIAL score. History (H) and ECG (E) components cannot be derived from structured FHIR data and are scored as 0. The actual HEART score may be up to 4 points higher. This partial score should NOT be used as a standalone clinical tool — it provides only the Age, Risk Factors, and Troponin components. A complete HEART score requires bedside clinical assessment.\n\n`;
   }
   md += `| Component | Points | Present | Source |\n`;
   md += `|-----------|--------|---------|--------|\n`;

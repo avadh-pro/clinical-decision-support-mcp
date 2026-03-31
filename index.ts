@@ -21,7 +21,10 @@ app.get("/hello-world", async (_, res) => {
   res.send("Hello World");
 });
 
+let requestCount = 0;
+
 app.get("/health", async (_, res) => {
+  const mem = process.memoryUsage();
   res.json({
     status: "ok",
     server: "Clinical Decision Support MCP Server",
@@ -29,7 +32,15 @@ app.get("/health", async (_, res) => {
     tools: 9,
     standards: ["FHIR R4", "MCP", "SHARP Extension Specs"],
     architecture: "Hybrid AI: Deterministic formulas + Claude interpretation",
-    uptime: process.uptime(),
+    uptime: Math.round(process.uptime()),
+    requests_served: requestCount,
+    memory_mb: {
+      rss: Math.round(mem.rss / 1024 / 1024),
+      heap_used: Math.round(mem.heapUsed / 1024 / 1024),
+      heap_total: Math.round(mem.heapTotal / 1024 / 1024),
+    },
+    anthropic_key_configured: !!process.env["ANTHROPIC_API_KEY"],
+    fhir_fallback_configured: !!process.env["FALLBACK_FHIR_URL"],
   });
 });
 
@@ -64,6 +75,7 @@ app.get("/info", async (_, res) => {
 });
 
 app.post("/mcp", async (req, res) => {
+  requestCount++;
   try {
     const server = new McpServer(
       {

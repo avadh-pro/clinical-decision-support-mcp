@@ -146,11 +146,13 @@ curl http://localhost:5000/health
 npm test
 ```
 
-11 unit tests covering deterministic clinical logic:
-- CHA2DS2-VASc scoring (3 patient scenarios)
-- Condition detection by SNOMED, ICD-10, and keyword (4 tests including false-positive prevention)
-- MELD-Na calculation with and without labs (2 tests)
-- Lab result extraction (2 tests)
+49 unit tests across 6 suites covering all deterministic clinical logic:
+- CHA2DS2-VASc scoring (10 tests: boundary values, age brackets, sex scoring, risk categories)
+- HEART score calculation (7 tests: age brackets, risk factors, troponin thresholds)
+- MELD-Na calculation (6 tests: known values, sodium correction, edge cases)
+- Condition detection (9 tests: word-boundary matching, SNOMED/ICD-10 codes, false-positive prevention)
+- Lab reference range flagging (13 tests: LOINC thresholds, critical/abnormal ranges, pediatric ranges)
+- Lab result retrieval (4 tests: most recent selection, multi-LOINC search)
 
 ### Manual Testing (HAPI FHIR Sandbox)
 
@@ -173,12 +175,24 @@ curl -X POST http://localhost:3000/mcp \
   }'
 ```
 
-### Test Patients (HAPI FHIR)
+### Verified FHIR Endpoints
 
-| Patient ID | Name | Data Available |
-|-----------|------|----------------|
-| `131284056` | Robert Chen, 72M | 4 conditions, 10 medications |
-| `123836453` | Michael Kihn, 51M | 12 conditions, 2 allergies |
+Tested against **multiple independent FHIR R4 servers** to validate interoperability:
+
+| FHIR Server | URL | Status |
+|-------------|-----|--------|
+| **HAPI FHIR** (public sandbox) | `https://hapi.fhir.org/baseR4` | All tools pass |
+| **SMART Health IT** (Harvard/BCH) | `https://launch.smarthealthit.org/v/r4/fhir` | All tools pass |
+| **Prompt Opinion** (hackathon platform) | Via SHARP headers | All tools pass |
+
+### Test Patients
+
+| Server | Patient ID | Name | Data Available |
+|--------|-----------|------|----------------|
+| HAPI FHIR | `131284056` | Robert Chen, 72M | 4 conditions, 10 medications |
+| HAPI FHIR | `123836453` | Michael Kihn, 51M | 12 conditions, 2 allergies |
+| SMART Health IT | `a74651a6-8141-4c7e-91b5-a43ce80e6b92` | Emeline Hilll | Synthea-generated |
+| Prompt Opinion | Margaret Chen, 67F | 6 conditions, 8 meds, 12 labs, 3 allergies | Demo bundle |
 
 ## FHIR Resources Used
 
@@ -222,7 +236,7 @@ All FHIR queries use SHARP Extension Specs headers:
 │   ├── PatientIdTool.ts
 │   └── index.ts              # Tool registry
 ├── tests/
-│   └── clinical-logic.test.ts # 11 unit tests
+│   └── clinical-logic.test.ts # 49 unit tests (6 suites)
 ├── demo-patient-bundle.json  # Margaret Chen (37 FHIR resources)
 ├── .env.example
 ├── Dockerfile

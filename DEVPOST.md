@@ -135,6 +135,15 @@ This is a hackathon prototype, but the architecture is production-ready:
 4. **EHR embedding** — deploy as a backend for EHR-integrated AI assistants (similar to CHOP's CHIPPER)
 5. **Marketplace scaling** — the MCP tool interface allows any institution to publish additional clinical tools
 
+### Business Model
+
+The clinical decision support market is projected at $2.3B by 2028 (MarketsAndMarkets), addressing $42B/year in medication-related harm globally. Our go-to-market path:
+
+- **Marketplace distribution** — free discovery on Prompt Opinion, per-tool-call pricing ($0.01–0.05/call) for production usage
+- **Enterprise licenses** — site licenses for health systems wanting unlimited CDS tool access across their FHIR infrastructure
+- **EHR embedding** — white-label backend for EHR vendors building AI assistants (Epic, Oracle Health, athenahealth)
+- **TAM**: Every FHIR-enabled health system in the US is a potential customer — that's every hospital under the 21st Century Cures Act
+
 ---
 
 ## How we built it

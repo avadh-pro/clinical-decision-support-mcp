@@ -1,7 +1,7 @@
 import { McpUtilities } from "../mcp-utilities";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types";
 
-const DISCLAIMER = `\n\n---\n*AI-generated clinical decision support. Risk scores are calculated using published, peer-reviewed formulas (not AI-generated). All interpretations require validation by a qualified healthcare professional and are not a substitute for professional clinical judgment. Supports adult and pediatric clinical contexts.*`;
+const DISCLAIMER = `\n\n---\n*AI-generated clinical decision support. Risk scores are calculated using published, peer-reviewed formulas (not AI-generated). All interpretations require validation by a qualified healthcare professional and are not a substitute for professional clinical judgment. Optimized for adult clinical contexts; pediatric-specific reference ranges and scoring (PELD, weight-based dosing) are on the development roadmap.*`;
 
 export const ResponseFormatter = {
   success(markdown: string): CallToolResult {
