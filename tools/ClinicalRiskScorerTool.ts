@@ -454,6 +454,7 @@ function formatCHA2DS2VASc(result: CHA2DS2VAScResult): string {
     md += `| ${c.name} | ${c.points} | ${c.present ? "Yes" : "No"} | ${c.source} |\n`;
   }
   md += `\n**Recommendation:** ${result.recommendation}\n`;
+  md += `\n**Reference:** Lip GYH et al. *Chest* 2010; European Heart Journal 2012\n`;
   return md;
 }
 
@@ -467,6 +468,7 @@ function formatHEART(result: HEARTResult): string {
   for (const c of result.components) {
     md += `| ${c.name} | ${c.points} | ${c.present ? "Yes" : "No"} | ${c.source} |\n`;
   }
+  md += `\n**Reference:** Six AJ et al. *Netherlands Heart Journal* 2008\n`;
   return md;
 }
 
@@ -488,6 +490,7 @@ function formatMELD(result: MELDResult): string {
   for (const c of result.components) {
     md += `| ${c.name} | ${c.value !== null ? c.value : "N/A"} | ${c.date} |\n`;
   }
+  md += `\n**Reference:** Kim WR et al. *Hepatology* 2008; Biggins SW et al. *Gastroenterology* 2006\n`;
   return md;
 }
 

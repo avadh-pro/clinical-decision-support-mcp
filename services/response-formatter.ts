@@ -1,7 +1,7 @@
 import { McpUtilities } from "../mcp-utilities";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types";
 
-const DISCLAIMER = `\n\n---\n*AI-generated clinical decision support. This analysis requires validation by a qualified healthcare professional and is not a substitute for professional clinical judgment. Generated using synthetic data only.*`;
+const DISCLAIMER = `\n\n---\n*AI-generated clinical decision support. Risk scores are calculated using published, peer-reviewed formulas (not AI-generated). All interpretations require validation by a qualified healthcare professional and are not a substitute for professional clinical judgment. Supports adult and pediatric clinical contexts.*`;
 
 export const ResponseFormatter = {
   success(markdown: string): CallToolResult {

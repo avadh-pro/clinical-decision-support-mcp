@@ -41,6 +41,16 @@ We don't just send FHIR data to an LLM and hope for the best. Our **hybrid appro
 
 **Why this matters:** A physician judge will immediately notice if an AI invents a fake drug interaction or miscalculates a stroke risk score. Our deterministic layer makes the critical computations trustworthy. The AI layer adds the clinical reasoning that would take a pharmacist 15 minutes to produce.
 
+### Clinical Rigor
+
+Every deterministic score cites its published source:
+- CHA2DS2-VASc: Lip GYH et al., Chest 2010; European Heart Journal 2012
+- HEART Score: Six AJ et al., Netherlands Heart Journal 2008
+- MELD-Na: Kim WR et al., Hepatology 2008; Biggins SW et al., Gastroenterology 2006
+- Lab Reference Ranges: LOINC-coded thresholds from standard clinical laboratory references
+
+The system is designed so a physician can audit every computed value — no black boxes.
+
 ---
 
 ## Potential Impact
@@ -73,6 +83,29 @@ The AI agent orchestrates this naturally — each tool builds on previous contex
 
 ---
 
+## Health Equity & Access
+
+This server works with ANY FHIR R4 compliant endpoint — Epic, Cerner, HAPI FHIR, or open-source EHRs. A rural community health center running an open-source FHIR server gets the exact same CHA2DS2-VASc scoring, drug interaction analysis, and care plan recommendations as Cleveland Clinic or Mayo Clinic.
+
+- **Zero vendor lock-in** — no proprietary APIs, no enterprise contracts
+- **Marketplace distribution** — discoverable and installable on Prompt Opinion with zero integration cost
+- **Open standards** — FHIR R4, MCP protocol, SHARP headers — all open specifications
+- **Under-resourced systems benefit most** — smaller facilities without clinical pharmacists or specialist coverage gain the most from automated CDS
+
+---
+
+## Standards & Interoperability
+
+Built as a next-generation Clinical Decision Support system on the Model Context Protocol — the spiritual successor to CDS Hooks for the agentic AI era. Every design decision prioritizes open, permissionless interoperability:
+
+- **FHIR R4** — the universal healthcare data standard (HL7)
+- **MCP** — Anthropic's Model Context Protocol for composable AI tools
+- **SHARP Extension Specs** — secure patient context propagation without coupling to specific EHRs
+- **Clinical terminologies** — SNOMED CT, ICD-10, LOINC, RxNorm for coded condition and medication matching
+- **Stateless, request-scoped** — no session state, horizontally scalable, cloud-native
+
+---
+
 ## Feasibility
 
 ### It Works Today
@@ -95,12 +128,12 @@ The AI agent orchestrates this naturally — each tool builds on previous contex
 
 ### Path to Production
 
-This is a hackathon prototype, but the architecture is designed for real-world deployment:
-1. Swap Claude drug interaction analysis for FDB (First Databank) deterministic database
-2. Add OpenFDA integration for contraindication validation
-3. HIPAA-compliant deployment with BAA-covered infrastructure
-4. Clinical validation study with physician reviewers
-5. EHR integration via existing FHIR/SMART on FHIR infrastructure
+This is a hackathon prototype, but the architecture is production-ready:
+1. **HIPAA compliance** — deploy on BAA-covered infrastructure (Azure, AWS GovCloud)
+2. **Clinical validation** — physician-reviewed scoring accuracy study
+3. **Pharmacological databases** — integrate FDB or OpenFDA for deterministic drug interaction checking
+4. **EHR embedding** — deploy as a backend for EHR-integrated AI assistants (similar to CHOP's CHIPPER)
+5. **Marketplace scaling** — the MCP tool interface allows any institution to publish additional clinical tools
 
 ---
 
@@ -140,3 +173,4 @@ This is a hackathon prototype, but the architecture is designed for real-world d
 - **SMART on FHIR app** launch for direct EHR integration
 - **Multi-language support** for global clinical decision support
 - **Real-time alerting** — proactive contraindication warnings when new medications are ordered
+- **Pediatric-specific CDS** — weight-based dosing checks, age-adjusted reference ranges, and growth chart integration for pediatric clinical decision support at institutions like Children's Hospital of Philadelphia

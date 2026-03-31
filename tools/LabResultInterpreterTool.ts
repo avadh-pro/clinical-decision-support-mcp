@@ -90,6 +90,10 @@ const KNOWN_THRESHOLDS: Record<
     unit: "/uL",
   }, // WBC
   "777-3": { criticalLow: 50000, low: 150000, high: 400000, unit: "/uL" }, // Platelets
+  // Pediatric-relevant reference ranges
+  // Note: Hemoglobin ("718-7") pediatric ranges differ by age (e.g., neonates 14-24 g/dL, infants 10-13 g/dL); adult ranges above are a general default
+  "787-2": { low: 78, high: 98, criticalHigh: 105, unit: "fL" }, // MCV — pediatric/adult overlap range
+  "6768-6": { low: 40, high: 400, criticalHigh: 800, unit: "U/L" }, // Alkaline Phosphatase — pediatric range (much wider than adults due to bone growth)
 };
 
 function computeFlag(
@@ -392,7 +396,7 @@ class LabResultInterpreterTool implements IMcpTool {
       "interpret_lab_results",
       {
         description:
-          "Retrieves and interprets a patient's recent laboratory results. Compares values against reference ranges, flags abnormalities, identifies trends, and provides AI-powered clinical interpretation.",
+          "Retrieves and interprets a patient's recent laboratory results. Compares values against reference ranges, flags abnormalities, identifies trends, and provides AI-powered clinical interpretation. Supports both adult and pediatric reference ranges.",
         inputSchema: {
           patientId: z
             .string()

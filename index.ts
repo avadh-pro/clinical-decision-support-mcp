@@ -22,7 +22,45 @@ app.get("/hello-world", async (_, res) => {
 });
 
 app.get("/health", async (_, res) => {
-  res.json({ status: "ok", server: "Clinical Decision Support MCP Server" });
+  res.json({
+    status: "ok",
+    server: "Clinical Decision Support MCP Server",
+    version: "1.0.0",
+    tools: 9,
+    standards: ["FHIR R4", "MCP", "SHARP Extension Specs"],
+    architecture: "Hybrid AI: Deterministic formulas + Claude interpretation",
+    uptime: process.uptime(),
+  });
+});
+
+app.get("/info", async (_, res) => {
+  res.json({
+    name: "Clinical Decision Support MCP Server",
+    version: "1.0.0",
+    description: "Next-generation CDS on MCP — deterministic clinical algorithms augmented by AI interpretation",
+    standards: {
+      protocol: "Model Context Protocol (MCP)",
+      data: "FHIR R4 (HL7)",
+      context: "SHARP Extension Specs",
+      terminology: ["SNOMED CT", "ICD-10", "LOINC", "RxNorm"],
+    },
+    architecture: {
+      pattern: "Hybrid AI",
+      deterministic: ["CHA2DS2-VASc", "HEART", "MELD-Na", "Lab Reference Ranges"],
+      ai_powered: ["Drug Interactions", "Contraindications", "Care Plans", "Clinical Notes NLP", "Patient Summary"],
+    },
+    interoperability: {
+      fhir_endpoints: "Any FHIR R4 compliant server",
+      vendor_lock_in: "None — works with Epic, Cerner, HAPI, or any FHIR R4 endpoint",
+      deployment: "Docker container, any cloud provider",
+    },
+    tools_count: 9,
+    safety: {
+      clinical_disclaimer: "Appended to every response",
+      hallucination_prevention: "Deterministic formulas for all clinical scores — AI interprets, never computes",
+      patient_context: "SHARP headers preferred over LLM-provided arguments",
+    },
+  });
 });
 
 app.post("/mcp", async (req, res) => {
