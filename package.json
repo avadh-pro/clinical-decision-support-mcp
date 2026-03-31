@@ -1,7 +1,7 @@
 {
   "name": "clinical-decision-support-mcp",
   "version": "1.0.0",
-  "description": "Clinical Decision Support MCP Server for Healthcare AI",
+  "description": "MCP server providing AI-augmented clinical decision support — drug interactions, contraindications, risk scoring, lab interpretation, and care planning via FHIR R4",
   "main": "index.ts",
   "engines": {
     "node": ">=20"

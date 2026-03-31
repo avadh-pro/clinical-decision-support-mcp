@@ -9,83 +9,17 @@ import { ResponseFormatter } from "../services/response-formatter";
 
 // ── Interfaces ──────────────────────────────────────────────────────
 
-interface Contraindication {
-  type: "absolute" | "relative" | "interaction" | "allergy";
-  description: string;
-  severity: "critical" | "major" | "moderate";
-  recommendation: string;
-}
-
-interface DoseAdjustment {
-  reason: string;
-  suggestion: string;
-}
-
-interface ContraindicationAnalysis {
-  canPrescribe: "yes" | "no" | "caution";
-  contraindications: Contraindication[];
-  doseAdjustments: DoseAdjustment[];
-  summary: string;
-}
-
-// ── Severity ordering ───────────────────────────────────────────────
-
-const SEVERITY_ORDER: Record<string, number> = {
-  critical: 0,
-  major: 1,
-  moderate: 2,
-};
-
-const VERDICT_ICONS: Record<string, string> = {
-  no: "\u274C",      // red X
-  caution: "\u26A0\uFE0F", // warning
-  yes: "\u2705",     // green check
-};
-
-// ── System prompt ───────────────────────────────────────────────────
-
-const SYSTEM_PROMPT = `You are a clinical pharmacologist with deep expertise in drug safety, pharmacokinetics, and pharmacodynamics. You are part of a clinical decision support system. Your role is to evaluate whether a specific drug can be safely prescribed to a patient, given their full clinical context.
-
-Rules:
-- Check for ABSOLUTE contraindications (organ dysfunction, known allergy class, pregnancy category X, etc.)
-- Check for RELATIVE contraindications (age, renal/hepatic impairment, disease interactions)
-- Check for DRUG-DRUG INTERACTIONS with every current medication
-- Check for DRUG-ALLERGY CROSS-REACTIVITY (e.g., penicillin allergy and cephalosporins)
-- Evaluate whether DOSE ADJUSTMENTS are needed based on renal function (eGFR/creatinine), hepatic function (AST/ALT/bilirubin), age, or weight
-- Be thorough — missing a contraindication is a patient safety issue
-- Do NOT make final prescribing decisions — flag issues for clinician review
-- If no contraindications exist, state that clearly
-
-Respond ONLY with valid JSON:
-{
-  "canPrescribe": "yes" | "no" | "caution",
-  "contraindications": [
-    {
-      "type": "absolute" | "relative" | "interaction" | "allergy",
-      "description": "string",
-      "severity": "critical" | "major" | "moderate",
-      "recommendation": "string"
-    }
-  ],
-  "doseAdjustments": [
-    {
-      "reason": "string",
-      "suggestion": "string"
-    }
-  ],
-  "summary": "string"
-}`;
-
-// ── Extraction helpers ──────────────────────────────────────────────
-
 interface ExtractedCondition {
   name: string;
-  codes: string[];
+  code: string | null;
+  system: string | null;
 }
 
 interface ExtractedMedication {
   name: string;
-  dosage: string | null;
+  dose: string | null;
+  route: string | null;
+  frequency: string | null;
 }
 
 interface ExtractedAllergy {
@@ -94,13 +28,75 @@ interface ExtractedAllergy {
   severity: string | null;
 }
 
-interface ExtractedLabResult {
+interface ExtractedLab {
   name: string;
-  value: string;
-  referenceRange: string | null;
-  date: string | null;
-  isAbnormal: boolean;
+  value: number;
+  unit: string;
+  date: string;
+  loincCode: string | null;
 }
+
+interface ContraindicationReason {
+  category:
+    | "allergy"
+    | "condition"
+    | "interaction"
+    | "renal"
+    | "hepatic"
+    | "age"
+    | "other";
+  detail: string;
+  severity: "high" | "moderate" | "low";
+}
+
+interface ContraindicationAnalysis {
+  verdict: "SAFE" | "CAUTION" | "CONTRAINDICATED";
+  reasons: ContraindicationReason[];
+  alternatives: string[];
+  monitoring: string[];
+}
+
+// ── LOINC codes for relevant labs ───────────────────────────────────
+
+const LAB_LOINC: Record<string, string[]> = {
+  eGFR: ["33914-3", "48642-3", "62238-1", "69405-9"],
+  creatinine: ["2160-0"],
+  bilirubin: ["1975-2"],
+  INR: ["6301-6"],
+  ALT: ["1742-6"],
+  AST: ["1920-8"],
+};
+
+// ── System prompt ───────────────────────────────────────────────────
+
+const SYSTEM_PROMPT = `You are a clinical pharmacist reviewing a prescribing decision as part of a clinical decision support system. Your role is to determine whether a proposed medication is safe for a specific patient by cross-referencing their conditions, current medications, allergies, and recent lab results.
+
+Rules:
+- Evaluate the proposed medication against ALL patient data provided
+- Check for absolute contraindications (allergies, organ dysfunction, dangerous interactions)
+- Check for relative contraindications (age-related risks, renal/hepatic dose adjustments needed)
+- Check for drug-drug interactions with current medications
+- Check for drug-allergy cross-reactivity (e.g., penicillin allergy and cephalosporins)
+- If the medication is contraindicated, suggest safer alternatives
+- If the medication can proceed with caution, specify required monitoring
+- Be thorough — missing a contraindication is a patient safety issue
+- Do NOT make the final prescribing decision — flag risks for the clinician
+
+Respond ONLY with valid JSON:
+{
+  "verdict": "SAFE" | "CAUTION" | "CONTRAINDICATED",
+  "reasons": [
+    {
+      "category": "allergy" | "condition" | "interaction" | "renal" | "hepatic" | "age" | "other",
+      "detail": "string",
+      "severity": "high" | "moderate" | "low"
+    }
+  ],
+  "alternatives": ["string — safer medication alternatives if contraindicated"],
+  "monitoring": ["string — recommended monitoring if prescribing proceeds"]
+}`;
+
+// ── Extraction helpers ──────────────────────────────────────────────
 
 function extractConditions(
   entries: fhirR4.BundleEntry[],
@@ -108,21 +104,16 @@ function extractConditions(
   return entries
     .map((e) => {
       const resource = e.resource as fhirR4.Condition;
+      const coding = resource.code?.coding?.[0];
       const name =
-        resource.code?.text ??
-        resource.code?.coding?.[0]?.display ??
-        null;
+        resource.code?.text ?? coding?.display ?? null;
       if (!name) return null;
 
-      const codes = (resource.code?.coding ?? [])
-        .map((c) => {
-          if (c.system?.includes("snomed")) return `SNOMED:${c.code}`;
-          if (c.system?.includes("icd")) return `ICD-10:${c.code}`;
-          return c.code ? `${c.system ?? "unknown"}:${c.code}` : null;
-        })
-        .filter(Boolean) as string[];
-
-      return { name, codes };
+      return {
+        name,
+        code: coding?.code ?? null,
+        system: coding?.system ?? null,
+      };
     })
     .filter(Boolean) as ExtractedCondition[];
 }
@@ -141,16 +132,21 @@ function extractMedications(
       if (!name) return null;
 
       const dosageInstruction = resource.dosageInstruction?.[0];
-      let dosage: string | null = dosageInstruction?.text ?? null;
-      if (!dosage) {
+      let dose: string | null = dosageInstruction?.text ?? null;
+      if (!dose) {
         const doseQuantity =
           dosageInstruction?.doseAndRate?.[0]?.doseQuantity;
         if (doseQuantity?.value != null) {
-          dosage = `${doseQuantity.value} ${doseQuantity.unit ?? ""}`.trim();
+          dose = `${doseQuantity.value} ${doseQuantity.unit ?? ""}`.trim();
         }
       }
 
-      return { name, dosage };
+      return {
+        name,
+        dose,
+        route: dosageInstruction?.route?.text ?? null,
+        frequency: dosageInstruction?.timing?.code?.text ?? null,
+      };
     })
     .filter(Boolean) as ExtractedMedication[];
 }
@@ -172,62 +168,74 @@ function extractAllergies(
         reaction?.manifestation?.[0]?.text ??
         reaction?.manifestation?.[0]?.coding?.[0]?.display ??
         null;
-      const severity = reaction?.severity ?? null;
 
-      return { substance, reaction: reactionText, severity };
+      return {
+        substance,
+        reaction: reactionText,
+        severity: reaction?.severity ?? null,
+      };
     })
     .filter(Boolean) as ExtractedAllergy[];
 }
 
-function extractAbnormalLabs(
+function extractRelevantLabs(
   entries: fhirR4.BundleEntry[],
-): ExtractedLabResult[] {
-  return entries
-    .map((e) => {
-      const resource = e.resource as fhirR4.Observation;
-      const name =
-        resource.code?.text ??
-        resource.code?.coding?.[0]?.display ??
-        null;
-      if (!name) return null;
+): ExtractedLab[] {
+  const allLoincCodes = Object.values(LAB_LOINC).flat();
+  const labs: ExtractedLab[] = [];
 
-      let value: string;
-      if (resource.valueQuantity?.value != null) {
-        value = `${resource.valueQuantity.value} ${resource.valueQuantity.unit ?? ""}`.trim();
-      } else if (resource.valueString) {
-        value = resource.valueString;
-      } else {
-        return null;
-      }
+  for (const entry of entries) {
+    const obs = entry.resource as fhirR4.Observation;
+    if (obs.valueQuantity?.value === undefined) continue;
 
-      const refRange = resource.referenceRange?.[0];
-      let referenceRange: string | null = null;
-      if (refRange?.text) {
-        referenceRange = refRange.text;
-      } else if (refRange?.low?.value != null || refRange?.high?.value != null) {
-        const low = refRange.low?.value != null ? `${refRange.low.value}` : "";
-        const high = refRange.high?.value != null ? `${refRange.high.value}` : "";
-        const unit = refRange.low?.unit ?? refRange.high?.unit ?? "";
-        referenceRange = `${low}-${high} ${unit}`.trim();
-      }
+    const coding = obs.code?.coding?.find(
+      (c) =>
+        c.system === "http://loinc.org" &&
+        allLoincCodes.includes(c.code ?? ""),
+    );
+    if (!coding) continue;
 
-      // Check if abnormal via interpretation or reference range
-      const isAbnormal =
-        resource.interpretation?.[0]?.coding?.some(
-          (c) =>
-            c.code === "H" ||
-            c.code === "L" ||
-            c.code === "HH" ||
-            c.code === "LL" ||
-            c.code === "A",
-        ) ?? false;
+    const name =
+      obs.code?.text ??
+      coding.display ??
+      coding.code ??
+      "Unknown";
 
-      const date = resource.effectiveDateTime ?? null;
+    labs.push({
+      name,
+      value: obs.valueQuantity.value,
+      unit: obs.valueQuantity.unit ?? "",
+      date: obs.effectiveDateTime ?? "unknown",
+      loincCode: coding.code ?? null,
+    });
+  }
 
-      return { name, value, referenceRange, date, isAbnormal };
-    })
-    .filter(Boolean) as ExtractedLabResult[];
+  // Sort by date descending, deduplicate by LOINC code (keep most recent)
+  labs.sort(
+    (a, b) =>
+      new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  const seen = new Set<string>();
+  const deduplicated: ExtractedLab[] = [];
+  for (const lab of labs) {
+    const key = lab.loincCode ?? lab.name.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduplicated.push(lab);
+    }
+  }
+
+  return deduplicated;
 }
+
+// ── Severity ordering for display ───────────────────────────────────
+
+const SEVERITY_ORDER: Record<string, number> = {
+  high: 0,
+  moderate: 1,
+  low: 2,
+};
 
 // ── Tool class ──────────────────────────────────────────────────────
 
@@ -237,35 +245,28 @@ class ContraindicationCheckerTool implements IMcpTool {
       "check_contraindications",
       {
         description:
-          "Evaluates whether a specific drug can be safely prescribed to a patient by cross-referencing their active conditions, current medications, allergies, and recent lab results against known contraindications, drug interactions, and allergy cross-reactivities. Returns a prescribing verdict with detailed contraindication findings and dose adjustment recommendations.",
+          "Check if a proposed medication is safe for this patient by cross-referencing their conditions, current medications, allergies, and recent lab results (renal/hepatic function). Returns pass/warn/block verdict with clinical reasoning.",
         inputSchema: {
-          drugName: z
+          proposedMedication: z
             .string()
-            .describe("The name of the drug being considered for prescribing"),
-          patientId: z
-            .string()
-            .optional()
             .describe(
-              "The patient ID. Do NOT provide this parameter \u2014 it is automatically resolved from the patient context. Only provide if explicitly given a specific patient ID.",
+              "The medication being considered for prescribing (e.g., 'Metformin', 'Warfarin', 'Lisinopril')",
             ),
         },
       },
-      async ({ drugName, patientId }) => {
+      async ({ proposedMedication }) => {
         try {
-          // 1. Resolve patient ID
-          const resolvedPatientId = FhirDataServiceInstance.getPatientId(
-            req,
-            patientId,
-          );
+          // 1. Resolve patient ID from SHARP headers
+          const patientId = FhirDataServiceInstance.getPatientId(req);
 
-          // 2. Fetch patient demographics + clinical data in parallel
+          // 2. Fetch patient demographics and FHIR data in parallel
           const [patient, dataMap] = await Promise.all([
-            FhirDataServiceInstance.getPatient(req, resolvedPatientId),
+            FhirDataServiceInstance.getPatient(req, patientId),
             FhirDataServiceInstance.fetchParallel(req, [
               {
                 resourceType: "Condition",
                 params: [
-                  `patient=${resolvedPatientId}`,
+                  `patient=${patientId}`,
                   "clinical-status=active",
                   "_count=100",
                 ],
@@ -273,7 +274,7 @@ class ContraindicationCheckerTool implements IMcpTool {
               {
                 resourceType: "MedicationRequest",
                 params: [
-                  `patient=${resolvedPatientId}`,
+                  `patient=${patientId}`,
                   "status=active",
                   "_count=100",
                 ],
@@ -281,14 +282,14 @@ class ContraindicationCheckerTool implements IMcpTool {
               {
                 resourceType: "AllergyIntolerance",
                 params: [
-                  `patient=${resolvedPatientId}`,
+                  `patient=${patientId}`,
                   "_count=100",
                 ],
               },
               {
                 resourceType: "Observation",
                 params: [
-                  `patient=${resolvedPatientId}`,
+                  `patient=${patientId}`,
                   "category=laboratory",
                   "_count=100",
                   "_sort=-date",
@@ -299,43 +300,38 @@ class ContraindicationCheckerTool implements IMcpTool {
 
           if (!patient) {
             return ResponseFormatter.error(
-              `Patient ${resolvedPatientId} could not be found.`,
+              `Patient ${patientId} could not be found.`,
             );
           }
 
-          // 3. Extract patient demographics
+          // 3. Extract structured data from FHIR resources
           const age = FhirDataServiceInstance.getPatientAge(patient);
           const sex = FhirDataServiceInstance.getPatientSex(patient);
-
-          // 4. Extract clinical data from FHIR resources
           const conditions = extractConditions(
             dataMap.get("Condition") ?? [],
           );
-          const medications = extractMedications(
+          const currentMeds = extractMedications(
             dataMap.get("MedicationRequest") ?? [],
           );
           const allergies = extractAllergies(
             dataMap.get("AllergyIntolerance") ?? [],
           );
-          const allLabs = extractAbnormalLabs(
+          const labs = extractRelevantLabs(
             dataMap.get("Observation") ?? [],
           );
-          // Include all labs for context but highlight abnormal ones
-          const abnormalLabs = allLabs.filter((l) => l.isAbnormal);
 
-          // 5. Build user prompt with full patient context
+          // 4. Build structured prompt for Claude
           const userPrompt = this._buildUserPrompt(
-            drugName,
+            proposedMedication,
             age,
             sex,
             conditions,
-            medications,
+            currentMeds,
             allergies,
-            allLabs,
-            abnormalLabs,
+            labs,
           );
 
-          // 6. Send to Claude for contraindication analysis
+          // 5. Send to Claude for contraindication analysis
           let claudeResponse: string;
           try {
             claudeResponse = await ClaudeServiceInstance.analyze(
@@ -343,56 +339,56 @@ class ContraindicationCheckerTool implements IMcpTool {
               userPrompt,
             );
           } catch {
-            // Claude fails -> return patient data without analysis
-            const patientDataMarkdown = this._buildPatientDataFallback(
-              drugName,
+            // Claude unavailable — return raw FHIR data for manual review
+            const fallbackMarkdown = this._buildFallbackMarkdown(
+              proposedMedication,
               age,
               sex,
               conditions,
-              medications,
+              currentMeds,
               allergies,
-              abnormalLabs,
+              labs,
             );
 
-            return ResponseFormatter.partialSuccess(patientDataMarkdown, [
+            return ResponseFormatter.partialSuccess(fallbackMarkdown, [
               "AI contraindication analysis could not be completed. Patient data provided for manual review.",
             ]);
           }
 
-          // 7. Parse Claude JSON response
+          // 6. Parse Claude JSON response
           const parsed =
             ClaudeServiceInstance.parseJSON<ContraindicationAnalysis>(
               claudeResponse,
             );
 
           if (!parsed) {
-            const patientDataMarkdown = this._buildPatientDataFallback(
-              drugName,
+            const fallbackMarkdown = this._buildFallbackMarkdown(
+              proposedMedication,
               age,
               sex,
               conditions,
-              medications,
+              currentMeds,
               allergies,
-              abnormalLabs,
+              labs,
             );
 
             return ResponseFormatter.partialSuccess(
-              `${patientDataMarkdown}\n\n## Analysis (Unstructured)\n${claudeResponse}`,
+              `${fallbackMarkdown}\n\n## Analysis (Unstructured)\n${claudeResponse}`,
               [
                 "The AI response could not be parsed as structured data. Raw analysis provided above.",
               ],
             );
           }
 
-          // 8. Build structured markdown response
+          // 7. Build formatted markdown response
           const markdown = this._buildMarkdownResponse(
-            drugName,
+            proposedMedication,
             age,
             sex,
             conditions,
-            medications,
+            currentMeds,
             allergies,
-            abnormalLabs,
+            labs,
             parsed,
           );
 
@@ -409,41 +405,52 @@ class ContraindicationCheckerTool implements IMcpTool {
   }
 
   private _buildUserPrompt(
-    drugName: string,
+    proposedMedication: string,
     age: number | null,
     sex: string,
     conditions: ExtractedCondition[],
-    medications: ExtractedMedication[],
+    currentMeds: ExtractedMedication[],
     allergies: ExtractedAllergy[],
-    allLabs: ExtractedLabResult[],
-    abnormalLabs: ExtractedLabResult[],
+    labs: ExtractedLab[],
   ): string {
     const sections: string[] = [];
 
-    sections.push(`Drug being evaluated for prescribing: **${drugName}**`);
     sections.push(
-      `Patient: Age ${age !== null ? age : "unknown"}, Sex ${sex}`,
+      `**Proposed Medication:** ${proposedMedication}`,
+    );
+    sections.push(
+      `**Patient:** Age ${age !== null ? age : "unknown"}, Sex ${sex}`,
     );
 
-    // Conditions
+    // Active conditions
     if (conditions.length > 0) {
       const condLines = conditions.map((c) => {
-        const codeStr = c.codes.length > 0 ? ` (${c.codes.join(", ")})` : "";
-        return `- ${c.name}${codeStr}`;
+        const codeInfo =
+          c.code && c.system
+            ? ` (${c.system.includes("snomed") ? "SNOMED" : c.system.includes("icd") ? "ICD-10" : "code"}: ${c.code})`
+            : "";
+        return `- ${c.name}${codeInfo}`;
       });
-      sections.push(`Active Conditions:\n${condLines.join("\n")}`);
+      sections.push(
+        `**Active Conditions:**\n${condLines.join("\n")}`,
+      );
     } else {
-      sections.push("Active Conditions: None recorded");
+      sections.push("**Active Conditions:** None recorded");
     }
 
-    // Medications
-    if (medications.length > 0) {
-      const medLines = medications.map(
-        (m) => `- ${m.name}${m.dosage ? ` \u2014 ${m.dosage}` : ""}`,
+    // Current medications
+    if (currentMeds.length > 0) {
+      const medLines = currentMeds.map((m) => {
+        const details = [m.dose, m.route, m.frequency]
+          .filter(Boolean)
+          .join(", ");
+        return `- ${m.name}${details ? ` (${details})` : ""}`;
+      });
+      sections.push(
+        `**Current Medications:**\n${medLines.join("\n")}`,
       );
-      sections.push(`Current Medications:\n${medLines.join("\n")}`);
     } else {
-      sections.push("Current Medications: None recorded");
+      sections.push("**Current Medications:** None recorded");
     }
 
     // Allergies
@@ -452,205 +459,174 @@ class ContraindicationCheckerTool implements IMcpTool {
         const parts = [a.substance];
         if (a.reaction) parts.push(`reaction: ${a.reaction}`);
         if (a.severity) parts.push(`severity: ${a.severity}`);
-        return `- ${parts.join(" | ")}`;
+        return `- ${parts.join(" — ")}`;
       });
-      sections.push(`Allergies:\n${allergyLines.join("\n")}`);
+      sections.push(
+        `**Allergies:**\n${allergyLines.join("\n")}`,
+      );
     } else {
-      sections.push("Allergies: None recorded");
+      sections.push("**Allergies:** None recorded");
     }
 
-    // Labs — show abnormal prominently, include recent normals for context
-    if (abnormalLabs.length > 0) {
-      const labLines = abnormalLabs.map((l) => {
-        const ref = l.referenceRange ? ` (ref: ${l.referenceRange})` : "";
-        const date = l.date ? ` [${l.date}]` : "";
-        return `- **ABNORMAL** ${l.name}: ${l.value}${ref}${date}`;
-      });
-      sections.push(`Recent Abnormal Lab Results:\n${labLines.join("\n")}`);
+    // Recent labs (renal/hepatic function)
+    if (labs.length > 0) {
+      const labLines = labs.map(
+        (l) => `- ${l.name}: ${l.value} ${l.unit} (${l.date})`,
+      );
+      sections.push(
+        `**Recent Labs (renal/hepatic function):**\n${labLines.join("\n")}`,
+      );
+    } else {
+      sections.push(
+        "**Recent Labs:** No relevant renal/hepatic labs available",
+      );
     }
 
-    // Also include a selection of recent normal labs for dose-adjustment context
-    const normalLabs = allLabs.filter((l) => !l.isAbnormal).slice(0, 20);
-    if (normalLabs.length > 0) {
-      const labLines = normalLabs.map((l) => {
-        const ref = l.referenceRange ? ` (ref: ${l.referenceRange})` : "";
-        const date = l.date ? ` [${l.date}]` : "";
-        return `- ${l.name}: ${l.value}${ref}${date}`;
-      });
-      sections.push(`Recent Lab Results (normal):\n${labLines.join("\n")}`);
-    }
-
-    if (allLabs.length === 0) {
-      sections.push("Recent Lab Results: None available");
-    }
-
-    return sections.join("\n\n");
+    return `Evaluate whether the following medication is safe to prescribe for this patient:\n\n${sections.join("\n\n")}`;
   }
 
-  private _buildPatientDataFallback(
-    drugName: string,
+  private _buildFallbackMarkdown(
+    proposedMedication: string,
     age: number | null,
     sex: string,
     conditions: ExtractedCondition[],
-    medications: ExtractedMedication[],
+    currentMeds: ExtractedMedication[],
     allergies: ExtractedAllergy[],
-    abnormalLabs: ExtractedLabResult[],
+    labs: ExtractedLab[],
   ): string {
-    const parts: string[] = [];
+    const condText =
+      conditions.length > 0
+        ? conditions.map((c) => c.name).join(", ")
+        : "None recorded";
+    const medText =
+      currentMeds.length > 0
+        ? currentMeds
+            .map((m) => `${m.name}${m.dose ? ` (${m.dose})` : ""}`)
+            .join(", ")
+        : "None recorded";
+    const allergyText =
+      allergies.length > 0
+        ? allergies.map((a) => a.substance).join(", ")
+        : "None recorded";
+    const labText =
+      labs.length > 0
+        ? labs
+            .map((l) => `${l.name}: ${l.value} ${l.unit}`)
+            .join(", ")
+        : "No relevant labs available";
 
-    parts.push(`# Contraindication Check: ${drugName}`);
-    parts.push(
-      `\n## Patient Context\n- **Age:** ${age !== null ? age : "Unknown"} | **Sex:** ${sex}`,
-    );
-
-    // Conditions
-    if (conditions.length > 0) {
-      const condLines = conditions
-        .map((c) => `- ${c.name}`)
-        .join("\n");
-      parts.push(`\n## Active Conditions\n${condLines}`);
-    } else {
-      parts.push("\n## Active Conditions\nNone recorded");
-    }
-
-    // Medications
-    if (medications.length > 0) {
-      const medLines = medications
-        .map(
-          (m) =>
-            `- **${m.name}**${m.dosage ? ` \u2014 ${m.dosage}` : ""}`,
-        )
-        .join("\n");
-      parts.push(`\n## Current Medications\n${medLines}`);
-    } else {
-      parts.push("\n## Current Medications\nNone recorded");
-    }
-
-    // Allergies
-    if (allergies.length > 0) {
-      const allergyLines = allergies
-        .map((a) => {
-          const details = [a.reaction, a.severity]
-            .filter(Boolean)
-            .join(", ");
-          return `- **${a.substance}**${details ? ` \u2014 ${details}` : ""}`;
-        })
-        .join("\n");
-      parts.push(`\n## Allergies\n${allergyLines}`);
-    } else {
-      parts.push("\n## Allergies\nNone recorded");
-    }
-
-    // Abnormal labs
-    if (abnormalLabs.length > 0) {
-      const labLines = abnormalLabs
-        .map((l) => {
-          const ref = l.referenceRange
-            ? ` (ref: ${l.referenceRange})`
-            : "";
-          return `- **${l.name}:** ${l.value}${ref}`;
-        })
-        .join("\n");
-      parts.push(`\n## Abnormal Lab Results\n${labLines}`);
-    }
-
-    parts.push(
-      "\n## Contraindication Analysis Unavailable\nThe AI analysis service is currently unavailable. Please review the patient data above and check for contraindications manually before prescribing.",
-    );
-
-    return parts.join("");
+    return [
+      `# Contraindication Check: ${proposedMedication}`,
+      ``,
+      `## Patient Context`,
+      `- **Age:** ${age !== null ? age : "unknown"} | **Sex:** ${sex}`,
+      `- **Active Conditions:** ${condText}`,
+      `- **Current Medications:** ${medText}`,
+      `- **Allergies:** ${allergyText}`,
+      `- **Recent Labs:** ${labText}`,
+      ``,
+      `## AI Analysis Unavailable`,
+      `The AI analysis service is currently unavailable. Please review the patient data above and manually assess contraindications for **${proposedMedication}**.`,
+    ].join("\n");
   }
 
   private _buildMarkdownResponse(
-    drugName: string,
+    proposedMedication: string,
     age: number | null,
     sex: string,
     conditions: ExtractedCondition[],
-    medications: ExtractedMedication[],
+    currentMeds: ExtractedMedication[],
     allergies: ExtractedAllergy[],
-    abnormalLabs: ExtractedLabResult[],
+    labs: ExtractedLab[],
     analysis: ContraindicationAnalysis,
   ): string {
-    const verdictIcon = VERDICT_ICONS[analysis.canPrescribe] ?? "";
-    const verdictLabel =
-      analysis.canPrescribe === "yes"
-        ? "Yes \u2014 No contraindications identified"
-        : analysis.canPrescribe === "no"
-          ? "No \u2014 Contraindication(s) found"
-          : "Caution \u2014 Prescribe with modifications";
+    const lines: string[] = [];
 
-    const parts: string[] = [];
+    // Title with color-coded verdict
+    const verdictEmoji =
+      analysis.verdict === "SAFE"
+        ? "\u2705"
+        : analysis.verdict === "CAUTION"
+          ? "\u26A0\uFE0F"
+          : "\uD83D\uDEAB";
+    lines.push(`# Contraindication Check: ${proposedMedication}`);
+    lines.push("");
+    lines.push(`## Verdict: ${verdictEmoji} ${analysis.verdict}`);
+    lines.push("");
 
-    // Header with verdict
-    parts.push(`# Contraindication Check: ${drugName}`);
-    parts.push(`\n## Verdict: ${verdictIcon} ${verdictLabel}`);
-
-    // Patient context
-    parts.push(
-      `\n## Patient Context\n- **Age:** ${age !== null ? age : "Unknown"} | **Sex:** ${sex}`,
+    // Patient context summary
+    lines.push("## Patient Context");
+    lines.push(
+      `- **Age:** ${age !== null ? age : "unknown"} | **Sex:** ${sex}`,
     );
-    parts.push(
+    lines.push(
       `- **Active Conditions:** ${conditions.length > 0 ? conditions.map((c) => c.name).join(", ") : "None recorded"}`,
     );
-    parts.push(
-      `- **Current Medications:** ${medications.length > 0 ? medications.map((m) => m.name).join(", ") : "None recorded"}`,
+    lines.push(
+      `- **Current Medications:** ${currentMeds.length > 0 ? currentMeds.map((m) => m.name).join(", ") : "None recorded"}`,
     );
-    parts.push(
+    lines.push(
       `- **Allergies:** ${allergies.length > 0 ? allergies.map((a) => a.substance).join(", ") : "None recorded"}`,
     );
-
-    // Contraindications table
-    const contraindications = (analysis.contraindications ?? []).sort(
-      (a, b) =>
-        (SEVERITY_ORDER[a.severity] ?? 2) -
-        (SEVERITY_ORDER[b.severity] ?? 2),
-    );
-
-    if (contraindications.length > 0) {
-      parts.push(`\n## Contraindications (${contraindications.length})\n`);
-      parts.push(
-        `| Severity | Type | Description | Recommendation |`,
+    if (labs.length > 0) {
+      lines.push(
+        `- **Key Labs:** ${labs.map((l) => `${l.name}: ${l.value} ${l.unit}`).join(", ")}`,
       );
-      parts.push(
-        `|----------|------|-------------|----------------|`,
+    }
+    lines.push("");
+
+    // Reasons table (sorted by severity)
+    if (analysis.reasons.length > 0) {
+      const sortedReasons = [...analysis.reasons].sort(
+        (a, b) =>
+          (SEVERITY_ORDER[a.severity] ?? 2) -
+          (SEVERITY_ORDER[b.severity] ?? 2),
       );
-      for (const ci of contraindications) {
-        const severityLabel = ci.severity.toUpperCase();
-        const typeLabel = ci.type.charAt(0).toUpperCase() + ci.type.slice(1);
-        parts.push(
-          `| **${severityLabel}** | ${typeLabel} | ${ci.description} | ${ci.recommendation} |`,
+
+      lines.push(`## Identified Concerns (${sortedReasons.length})`);
+      lines.push("");
+      lines.push("| Severity | Category | Detail |");
+      lines.push("|----------|----------|--------|");
+      for (const reason of sortedReasons) {
+        const severityIcon =
+          reason.severity === "high"
+            ? "\uD83D\uDD34 High"
+            : reason.severity === "moderate"
+              ? "\uD83D\uDFE1 Moderate"
+              : "\uD83D\uDFE2 Low";
+        lines.push(
+          `| ${severityIcon} | ${reason.category} | ${reason.detail} |`,
         );
       }
+      lines.push("");
     } else {
-      parts.push(
-        "\n## Contraindications\nNo contraindications identified.",
-      );
+      lines.push("## Identified Concerns");
+      lines.push("");
+      lines.push("No contraindications or concerns identified.");
+      lines.push("");
     }
 
-    // Dose adjustments
-    const doseAdjustments = analysis.doseAdjustments ?? [];
-    if (doseAdjustments.length > 0) {
-      parts.push(`\n## Dose Adjustments\n`);
-      for (const adj of doseAdjustments) {
-        parts.push(`- **${adj.reason}:** ${adj.suggestion}`);
+    // Alternatives section
+    if (analysis.alternatives.length > 0) {
+      lines.push("## Suggested Alternatives");
+      lines.push("");
+      for (const alt of analysis.alternatives) {
+        lines.push(`- ${alt}`);
       }
+      lines.push("");
     }
 
-    // Abnormal labs for reference
-    if (abnormalLabs.length > 0) {
-      parts.push(`\n## Relevant Abnormal Labs\n`);
-      for (const lab of abnormalLabs) {
-        const ref = lab.referenceRange
-          ? ` (ref: ${lab.referenceRange})`
-          : "";
-        parts.push(`- **${lab.name}:** ${lab.value}${ref}`);
+    // Monitoring recommendations
+    if (analysis.monitoring.length > 0) {
+      lines.push("## Recommended Monitoring");
+      lines.push("");
+      for (const mon of analysis.monitoring) {
+        lines.push(`- ${mon}`);
       }
+      lines.push("");
     }
 
-    // Summary
-    parts.push(`\n## Summary\n${analysis.summary}`);
-
-    return parts.join("\n");
+    return lines.join("\n");
   }
 }
 

@@ -2718,6 +2718,132 @@
         "method": "PUT",
         "url": "DocumentReference/doc-progress-note-margaret"
       }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-discharge-summary-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "18842-5",
+              "display": "Discharge summary"
+            }
+          ],
+          "text": "Discharge Summary"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "date": "2026-01-19T16:00:00Z",
+        "author": [
+          {
+            "display": "Dr. Sarah Kim, Internal Medicine"
+          }
+        ],
+        "description": "Discharge summary for acute decompensated heart failure admission",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "RElTQ0hBUkdFIFNVTU1BUlkKUGF0aWVudDogTWFyZ2FyZXQgQ2hlbiwgNjdGCkFkbWlzc2lvbiBEYXRlOiAyMDI2LTAxLTE1CkRpc2NoYXJnZSBEYXRlOiAyMDI2LTAxLTE5CkFkbWl0dGluZyBEaWFnbm9zaXM6IEFjdXRlIGRlY29tcGVuc2F0ZWQgaGVhcnQgZmFpbHVyZSAoSEZyRUYpClByaW5jaXBhbCBEaWFnbm9zaXM6IEFjdXRlIG9uIGNocm9uaWMgc3lzdG9saWMgaGVhcnQgZmFpbHVyZSwgTFZFRiAzNSUKCkhpc3Rvcnkgb2YgUHJlc2VudCBJbGxuZXNzOgo2Ny15ZWFyLW9sZCBmZW1hbGUgd2l0aCBrbm93biBIRnJFRiAoRUYgMzUlKSwgYXRyaWFsIGZpYnJpbGxhdGlvbiBvbiB3YXJmYXJpbiwgdHlwZSAyIGRpYWJldGVzLCBDS0Qgc3RhZ2UgMywgYW5kIGh5cGVydGVuc2lvbiBwcmVzZW50ZWQgd2l0aCAzIGRheXMgb2Ygd29yc2VuaW5nIGR5c3BuZWEsIG9ydGhvcG5lYSwgYW5kIGJpbGF0ZXJhbCBsb3dlciBleHRyZW1pdHkgZWRlbWEuIEJOUCBlbGV2YXRlZCBhdCAxMjUwIHBnL21MLiBDaGVzdCBYLXJheSBzaG93ZWQgYmlsYXRlcmFsIHBsZXVyYWwgZWZmdXNpb25zIGFuZCBwdWxtb25hcnkgY29uZ2VzdGlvbi4KCkhvc3BpdGFsIENvdXJzZToKUGF0aWVudCB3YXMgYWRtaXR0ZWQgdG8gdGVsZW1ldHJ5IGFuZCBzdGFydGVkIG9uIElWIGZ1cm9zZW1pZGUgNDBtZyBCSUQgd2l0aCBnb29kIGRpdXJldGljIHJlc3BvbnNlLiBMb3N0IDQuMiBrZyBvZiBmbHVpZCB3ZWlnaHQgb3ZlciA0IGRheXMuIFRyYW5zaXRpb25lZCB0byBvcmFsIGZ1cm9zZW1pZGUgNDBtZyBkYWlseS4gQ2FyZGlvbG9neSBjb25zdWx0ZWQgLSByZWNvbW1lbmRlZCB1cHRpdHJhdGlvbiBvZiBjYXJ2ZWRpbG9sIGZyb20gMTIuNW1nIEJJRCB0byAyNW1nIEJJRCBhcyB0b2xlcmF0ZWQuIElOUiB0aGVyYXBldXRpYyBhdCAyLjMuIFJlbmFsIGZ1bmN0aW9uIHN0YWJsZSB3aXRoIGNyZWF0aW5pbmUgMS40IG1nL2RMLCBlR0ZSIDM4LiBIYkExYyA3LjIlIC0gZW5kb2NyaW5lIHJlY29tbWVuZGVkIGNvbnRpbnVpbmcgY3VycmVudCBkaWFiZXRlcyByZWdpbWVuLiBFbGVjdHJvbHl0ZXMgbW9uaXRvcmVkIC0gcG90YXNzaXVtIDQuMSBtRXEvTCBvbiBkaXNjaGFyZ2UuCgpEaXNjaGFyZ2UgTWVkaWNhdGlvbnM6CjEuIFdhcmZhcmluIDVtZyBkYWlseSAoSU5SIGdvYWwgMi0zKQoyLiBNZXRmb3JtaW4gMTAwMG1nIEJJRAozLiBMaXNpbm9wcmlsIDIwbWcgZGFpbHkKNC4gQXRvcnZhc3RhdGluIDQwbWcgZGFpbHkKNS4gQ2FydmVkaWxvbCAyNW1nIEJJRCAodXB0aXRyYXRlZCBmcm9tIDEyLjVtZykKNi4gRnVyb3NlbWlkZSA0MG1nIGRhaWx5IChuZXcpCjcuIEFzcGlyaW4gODFtZyBkYWlseQo4LiBPbWVwcmF6b2xlIDIwbWcgZGFpbHkKCkZvbGxvdy11cDogQ2FyZGlvbG9neSBpbiAyIHdlZWtzLCBQQ1AgaW4gMSB3ZWVrLCBJTlIgY2hlY2sgaW4gMyBkYXlzCg==",
+              "title": "Discharge Summary - Margaret Chen - 2026-01-19"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-discharge-summary-margaret"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-cardiology-consult-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11488-4",
+              "display": "Consult note"
+            }
+          ],
+          "text": "Cardiology Consultation"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "date": "2026-01-16T10:30:00Z",
+        "author": [
+          {
+            "display": "Dr. James Park, Cardiology"
+          }
+        ],
+        "description": "Cardiology consultation for acute decompensated heart failure management",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "Q0FSRElPTE9HWSBDT05TVUxUQVRJT04KRGF0ZTogMjAyNi0wMS0xNgpSZXF1ZXN0aW5nIFNlcnZpY2U6IEludGVybmFsIE1lZGljaW5lClJlYXNvbiBmb3IgQ29uc3VsdGF0aW9uOiBNYW5hZ2VtZW50IG9mIGFjdXRlIGRlY29tcGVuc2F0ZWQgaGVhcnQgZmFpbHVyZQoKQXNzZXNzbWVudCBhbmQgUGxhbjoKMS4gQWN1dGUgZGVjb21wZW5zYXRlZCBIRnJFRiAoTFZFRiAzNSUpOgogICAtIENvbnRpbnVlIElWIGRpdXJlc2lzLCB0YXJnZXQgbmV0IG5lZ2F0aXZlIDEtMS41TC9kYXkKICAgLSBVcHRpdHJhdGUgY2FydmVkaWxvbCB0byAyNW1nIEJJRCB3aGVuIGhlbW9keW5hbWljYWxseSBzdGFibGUKICAgLSBDb25zaWRlciBhZGRpbmcgc2FjdWJpdHJpbC92YWxzYXJ0YW4gYWZ0ZXIgc3RhYmlsaXphdGlvbiAocmVwbGFjZSBsaXNpbm9wcmlsKQogICAtIEVjaG9jYXJkaW9ncmFtIG9yZGVyZWQgdG8gcmVhc3Nlc3MgRUYgYW5kIHZhbHZ1bGFyIGZ1bmN0aW9uCiAgIAoyLiBBdHJpYWwgRmlicmlsbGF0aW9uOgogICAtIFJhdGUgY29udHJvbGxlZCBvbiBjYXJ2ZWRpbG9sCiAgIC0gQ0hBMkRTMi1WQVNjIHNjb3JlOiA1IChmZW1hbGUsIGFnZSA2NywgQ0hGLCBIVE4sIERNKSAtIEhJR0ggc3Ryb2tlIHJpc2sKICAgLSBDb250aW51ZSB3YXJmYXJpbiwgSU5SIGdvYWwgMi0zCiAgIC0gRGlzY3VzcyBET0FDIGNvbnZlcnNpb24gYXQgZm9sbG93LXVwIChyZW5hbCBmdW5jdGlvbiBsaW1pdGluZyBmYWN0b3IpCgozLiBUeXBlIDIgRGlhYmV0ZXM6CiAgIC0gSGJBMWMgNy4yJSAtIHJlYXNvbmFibGUgY29udHJvbAogICAtIE1vbml0b3IgbWV0Zm9ybWluIHdpdGggZGVjbGluaW5nIGVHRlIgKGN1cnJlbnRseSAzOCwgdGhyZXNob2xkIDMwKQogICAtIENvbnNpZGVyIFNHTFQyIGluaGliaXRvciBmb3IgZHVhbCBjYXJkaW8tcmVuYWwgYmVuZWZpdAoKNC4gQ0tEIFN0YWdlIDNiOgogICAtIGVHRlIgMzgsIGNyZWF0aW5pbmUgMS40CiAgIC0gTW9uaXRvciBjbG9zZWx5IHdpdGggZGl1cmVzaXMKICAgLSBSZW5hbC1kb3NlIGFsbCBtZWRpY2F0aW9ucyBhcHByb3ByaWF0ZWx5Cg==",
+              "title": "Cardiology Consultation - Margaret Chen - 2026-01-16"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-cardiology-consult-margaret"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d1000001-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-med-reconciliation-margaret",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "56445-0",
+              "display": "Medication reconciliation note"
+            }
+          ],
+          "text": "Medication Reconciliation"
+        },
+        "subject": {
+          "reference": "Patient/demo-margaret-chen",
+          "display": "Margaret Chen"
+        },
+        "date": "2026-01-15T14:00:00Z",
+        "author": [
+          {
+            "display": "Clinical Pharmacy Service"
+          }
+        ],
+        "description": "Medication reconciliation on admission for heart failure",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "data": "TUVESUNBVElPTiBSRUNPTkNJTElBVElPTgpEYXRlOiAyMDI2LTAxLTE1ClBoYXJtYWNpc3Q6IENsaW5pY2FsIFBoYXJtYWN5IFNlcnZpY2UKCkN1cnJlbnQgTWVkaWNhdGlvbnMgUmV2aWV3ZWQ6CjEuIFdhcmZhcmluIDVtZyBkYWlseSAtIENPTlRJTlVFIChJTlIgMi4zLCB0aGVyYXBldXRpYykKMi4gTWV0Zm9ybWluIDEwMDBtZyBCSUQgLSBDQVVUSU9OOiBlR0ZSIDM4LCBhcHByb2FjaGluZyB0aHJlc2hvbGQgZm9yIGRvc2UgcmVkdWN0aW9uCjMuIExpc2lub3ByaWwgMjBtZyBkYWlseSAtIENPTlRJTlVFLCBtb25pdG9yIEsrIGFuZCBjcmVhdGluaW5lCjQuIEF0b3J2YXN0YXRpbiA0MG1nIGRhaWx5IC0gQ09OVElOVUUKNS4gQ2FydmVkaWxvbCAxMi41bWcgQklEIC0gVVBUSVRSQVRFIHRvIDI1bWcgQklEIHBlciBjYXJkaW9sb2d5CjYuIEFzcGlyaW4gODFtZyBkYWlseSAtIFJFVklFVzogY29uY3VycmVudCB3YXJmYXJpbiBpbmNyZWFzZXMgYmxlZWRpbmcgcmlzawo3LiBPbWVwcmF6b2xlIDIwbWcgZGFpbHkgLSBDT05USU5VRSBmb3IgR0kgcHJvcGh5bGF4aXMgZ2l2ZW4gZHVhbCBhbnRpdGhyb21ib3RpYwoKRHJ1ZyBJbnRlcmFjdGlvbiBBbGVydHM6Ci0gTUFKT1I6IFdhcmZhcmluICsgQXNwaXJpbjogSW5jcmVhc2VkIGJsZWVkaW5nIHJpc2suIENsaW5pY2FsIGp1c3RpZmljYXRpb24gZG9jdW1lbnRlZC4KLSBNT0RFUkFURTogV2FyZmFyaW4gKyBPbWVwcmF6b2xlOiBNYXkgYWx0ZXIgd2FyZmFyaW4gbWV0YWJvbGlzbS4gTW9uaXRvciBJTlIuCi0gTU9ERVJBVEU6IE1ldGZvcm1pbiArIGNvbnRyYXN0IGR5ZTogSG9sZCBpZiBjb250cmFzdCBzdHVkeSBwbGFubmVkLgoKQWxsZXJneSBWZXJpZmljYXRpb246Ci0gUGVuaWNpbGxpbjogUmFzaCAoY29uZmlybWVkIHdpdGggcGF0aWVudCkKLSBTdWxmb25hbWlkZXM6IEFuYXBoeWxheGlzIChjb25maXJtZWQsIGhpZ2gtcmlzaykKLSBJb2RpbmUgY29udHJhc3Q6IFVydGljYXJpYSAocHJlbWVkaWNhdGlvbiBwcm90b2NvbCBpZiBuZWVkZWQpCg==",
+              "title": "Medication Reconciliation - Margaret Chen - 2026-01-15"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "DocumentReference/doc-med-reconciliation-margaret"
+      }
     }
   ]
 }

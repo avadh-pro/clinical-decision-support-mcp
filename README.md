@@ -10,69 +10,84 @@ Built for the [Agents Assemble — Healthcare AI Endgame](https://agents-assembl
 
 | Statistic | Source |
 |-----------|--------|
-| **7,000–9,000 deaths/year** in the US from medication errors | FDA |
-| **$42 billion/year** cost of medication-related harm globally | WHO |
-| **6 million Americans** living with atrial fibrillation need stroke risk assessment | CDC |
-| **1.3 million injuries/year** from medication errors in the US alone | IOM |
+| **1.3 million ED visits/year** from adverse drug events in the US | CDC |
+| **250,000+ deaths/year** from medical errors — the third leading cause of death | BMJ |
+| **40% of adults 65+** take 5 or more concurrent medications, creating complex polypharmacy | NCHS |
+| **6 million+ patients** with atrial fibrillation depend on CHA2DS2-VASc-driven anticoagulation decisions | AHA |
+| **$42 billion/year** in medication-related harm globally | WHO |
 
-This server puts evidence-based clinical reasoning directly into AI agent workflows — catching dangerous drug interactions, flagging contraindications, and calculating risk scores **before** a prescribing decision is made.
+This server provides AI-augmented clinical decision support that addresses these challenges directly — catching dangerous drug interactions, flagging contraindications, and calculating risk scores **before** a prescribing decision is made.
 
 ## What It Does
 
-8 clinical decision support tools via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io). Each tool retrieves live patient data from FHIR R4 servers via [SHARP Extension Specs](https://sharponmcp.com) and combines **deterministic clinical logic with AI-powered reasoning**.
+9 clinical decision support tools via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io). Each tool retrieves live patient data from FHIR R4 servers via [SHARP Extension Specs](https://sharponmcp.com) and combines **deterministic clinical logic with AI-powered reasoning**.
 
-### Clinical Tools (6)
+### Clinical Tools (7)
 
 | Tool | What It Does |
 |------|-------------|
-| `generate_patient_summary` | Aggregates demographics, conditions, medications, labs, allergies, and encounters into a clinician-ready summary with AI narrative synthesis |
-| `check_drug_interactions` | Analyzes active medications for drug-drug interactions, classifies by severity (critical/major/moderate/minor), explains mechanisms |
-| `check_contraindications` | **"Can I prescribe Drug X to this patient?"** — cross-references conditions, meds, allergies, and labs to catch contraindications before prescribing |
-| `interpret_lab_results` | Retrieves lab results, flags abnormalities against reference ranges, detects trends, provides AI clinical interpretation |
-| `calculate_risk_scores` | Calculates CHA2DS2-VASc (stroke risk), HEART (chest pain), and MELD-Na (liver severity) using **deterministic formulas** with AI interpretation |
-| `suggest_care_plan` | Analyzes the full clinical picture to generate evidence-based care plan recommendations aligned with clinical guidelines |
-| `parse_clinical_notes` | Extracts structured data (diagnoses, medications, procedures, labs) from unstructured clinical documents using NLP |
+| `generate_patient_summary` | Comprehensive patient overview aggregating 6 FHIR resource types into a clinician-ready narrative |
+| `check_drug_interactions` | AI pharmacist analyzing polypharmacy risks with severity classification (critical/major/moderate/minor) and mechanism explanations |
+| `check_contraindications` | Prescribing safety check — cross-references conditions, allergies, labs, and current medications before a new drug is ordered |
+| `interpret_lab_results` | Reference range flagging, trend detection, and clinical interpretation across all available laboratory observations |
+| `calculate_risk_scores` | Deterministic CHA2DS2-VASc, HEART, and MELD-Na scoring with AI-powered clinical interpretation |
+| `suggest_care_plan` | Evidence-based care recommendations citing clinical guidelines, synthesized from the full clinical picture |
+| `parse_clinical_notes` | NLP extraction of structured data (diagnoses, medications, procedures, labs) from unstructured clinical documents |
 
 ### Utility Tools (2)
 
 | Tool | What It Does |
 |------|-------------|
-| `GetPatientAge` | Returns patient age from birth date |
-| `FindPatientId` | Returns patient ID from SHARP context |
+| `FindPatientId` | Patient lookup by name from SHARP context |
+| `GetPatientAge` | Age calculation from patient birth date |
 
-## The Hybrid AI Approach
+## AI Factor: Hybrid Architecture
 
-This isn't just "send FHIR data to an LLM and hope for the best." We use a **hybrid architecture**:
+This is not "send FHIR data to an LLM and hope for the best." The server uses a **hybrid architecture** where deterministic clinical formulas and AI reasoning each handle what they do best.
 
-- **Deterministic computation** for published clinical formulas — CHA2DS2-VASc stroke risk scoring uses the exact published point system (CHF=1, Hypertension=1, Age≥75=2, Diabetes=1, Stroke/TIA=2, Vascular disease=1, Age 65-74=1, Female=1). MELD-Na uses the validated logarithmic formula. Lab flagging uses established reference ranges. **These never hallucinate.**
+**Deterministic layer (zero hallucination risk):**
+- CHA2DS2-VASc stroke risk scoring uses the exact published point system
+- MELD-Na uses the validated logarithmic formula
+- HEART score follows the established 0-10 point scale
+- Lab flagging uses published reference ranges with trend detection
+- Condition matching uses SNOMED CT and ICD-10 codes, not free-text guessing
 
-- **AI reasoning** for interpretation, drug interaction analysis, contraindication screening, care plan synthesis, and clinical note parsing — where Claude's medical knowledge adds genuine value.
+**AI reasoning layer (genuine clinical value):**
+- Drug interaction analysis with mechanism explanations
+- Contraindication screening across conditions, allergies, labs, and medications
+- Care plan synthesis aligned with clinical guidelines
+- Clinical note parsing via NLP
+- Contextual interpretation of deterministic results
+
+**Example:** CHA2DS2-VASc is calculated deterministically from FHIR data — CHF(+1), Hypertension(+1), Age>=75(+2), Diabetes(+1), Stroke/TIA(+2), Vascular disease(+1), Age 65-74(+1), Female(+1). The AI then interprets that score in the patient's full clinical context, considering their medications, renal function, and bleeding risk factors. The number is reproducible; the interpretation adds clinical reasoning that goes beyond rule-based systems.
 
 ```
 Patient Question
-       │
-       ▼
-┌──────────────────────────────┐
-│   Deterministic Layer        │  ← Published formulas, reference ranges
-│   (CHA2DS2-VASc, MELD,      │     SNOMED/ICD-10 code matching
-│    lab flagging, trends)     │     Zero hallucination risk
-└──────────┬───────────────────┘
-           │
-           ▼
-┌──────────────────────────────┐
-│   AI Interpretation Layer    │  ← Clinical reasoning, drug knowledge
-│   (Claude Sonnet 4.6)       │     Interaction analysis, care plans
-│                              │     Always marked as AI-generated
-└──────────┬───────────────────┘
-           │
-           ▼
+       |
+       v
++------------------------------+
+|   Deterministic Layer        |  <- Published formulas, reference ranges
+|   (CHA2DS2-VASc, MELD-Na,   |     SNOMED/ICD-10 code matching
+|    HEART, lab flagging)      |     Zero hallucination risk
++-------------+----------------+
+              |
+              v
++------------------------------+
+|   AI Interpretation Layer    |  <- Clinical reasoning, drug knowledge
+|   (Claude Sonnet 4.6)       |     Interaction analysis, care plans
+|                              |     Always marked as AI-generated
++-------------+----------------+
+              |
+              v
     Clinician-ready output
     with disclaimer
 ```
 
-## Demo: Margaret Chen Clinical Cascade
+## Demo Scenario: Margaret Chen
 
-Meet Margaret Chen — 67-year-old female, recently diagnosed with atrial fibrillation, managing type 2 diabetes and hypertension for over a decade. Her demo bundle includes 37 FHIR resources: demographics, conditions, medications, lab results, allergies, encounters, and 3 clinical notes.
+Margaret Chen is a 67-year-old female with **6 active conditions**: atrial fibrillation, type 2 diabetes, hypertension, CKD stage 3, hyperlipidemia, and HFrEF. She takes **8 concurrent medications** creating complex polypharmacy. Her chart includes **12 recent lab results** with multiple abnormal findings and **3 documented drug allergies**.
+
+This complexity is where AI adds genuine value over manual review. Her demo bundle includes 37 FHIR resources.
 
 **One question triggers a clinical cascade:**
 
@@ -214,14 +229,34 @@ All FHIR queries use SHARP Extension Specs headers:
 └── package.json
 ```
 
-## Privacy & Safety
+## Feasibility & Safety
 
-- **Synthetic data only** — never processes real PHI in demo mode
+- **FHIR R4 compliant** via SHARP Extension Specs — standard healthcare interoperability
+- **No real PHI processed** — synthetic data only; no patient data stored beyond request lifecycle
+- **Clinical disclaimers** appended to every response requiring professional validation
+- **Patient context from SHARP headers** — not LLM-generated, ensuring identity integrity
 - **PII minimization** — patient identifiers stripped before Claude API calls
-- **Token isolation** — FHIR access tokens are never forwarded to external services
-- **No persistence** — no patient data stored beyond request lifecycle
-- **Clinical disclaimer** — every response includes a disclaimer requiring professional validation
-- **Deterministic safety** — risk scores use published formulas, not AI generation
+- **Token isolation** — FHIR access tokens never forwarded to external services
+- **Graceful degradation** — partial results returned when AI is unavailable (deterministic layer still functions)
+- **Production patterns** — retry logic, parallel FHIR queries, error isolation, request timeouts
+
+---
+
+## Judging Criteria Alignment
+
+### AI Factor
+
+The hybrid architecture is the core differentiator. Deterministic clinical formulas (CHA2DS2-VASc, MELD-Na, HEART score, lab reference ranges) ensure reproducibility and safety. Claude AI provides contextual interpretation, drug interaction analysis, and care plan synthesis that goes beyond what rule-based systems can deliver. The AI adds genuine clinical reasoning — not just data retrieval.
+
+### Potential Impact
+
+Adverse drug events, polypharmacy errors, and missed contraindications are preventable harms. This server puts decision support directly into the AI agent workflow — the clinician gets interaction checks, risk scores, and contraindication alerts before making prescribing decisions. With 1.3 million ED visits annually from adverse drug events, even modest adoption reduces harm.
+
+### Feasibility
+
+FHIR R4 is the established standard for EHR interoperability. The MCP protocol enables any compatible AI agent to use these tools without custom integration. SHARP headers provide secure patient context. The server runs on a single Node.js process, deploys to any container host, and requires only an Anthropic API key. Eleven unit tests validate deterministic clinical logic.
+
+---
 
 ## Built With
 

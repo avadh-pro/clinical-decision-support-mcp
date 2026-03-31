@@ -525,4 +525,7 @@ Respond in JSON format:
   }
 }
 
+// Exported for testing
+export { computeFlag, KNOWN_THRESHOLDS };
+
 export const LabResultInterpreterToolInstance = new LabResultInterpreterTool();
