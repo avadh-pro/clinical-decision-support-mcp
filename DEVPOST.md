@@ -16,7 +16,7 @@ Our MCP server gives any healthcare AI agent on the Prompt Opinion platform real
 4. "Can I prescribe amiodarone?" → screens contraindications against conditions, allergies, current meds, and labs
 5. "Create a care plan" → synthesizes evidence-based recommendations from the complete picture
 
-**8 tools total:** Patient summary, drug interaction checker, contraindication screener, lab interpreter, risk score calculator (CHA2DS2-VASc, HEART, MELD-Na), care plan generator, clinical notes parser, plus utility tools.
+**9 tools total:** Patient summary, drug interaction checker, contraindication screener, lab interpreter, risk score calculator (CHA2DS2-VASc, HEART, MELD-Na), care plan generator, clinical notes parser, plus utility tools.
 
 ---
 
@@ -80,7 +80,7 @@ The AI agent orchestrates this naturally — each tool builds on previous contex
 - **Live on Render** — deployed, accessible, published to Prompt Opinion marketplace
 - **Standard protocols** — FHIR R4 + SHARP Extension Specs + MCP = works with any conformant EHR
 - **Tested against real FHIR servers** — validated with HAPI FHIR sandbox patients beyond our demo data
-- **11 automated tests** for deterministic clinical logic (CHA2DS2-VASc, MELD-Na, condition detection)
+- **49 automated tests** across 6 suites for deterministic clinical logic (CHA2DS2-VASc, MELD-Na, HEART, condition detection, lab flagging)
 - **Graceful degradation** — if Claude is unavailable, tools return deterministic results + raw data for manual review
 
 ### Production-Ready Architecture
