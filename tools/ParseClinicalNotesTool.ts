@@ -3,7 +3,9 @@ import { Request } from "express";
 import { IMcpTool } from "../IMcpTool";
 import { z } from "zod";
 import { fhirR4 } from "@smile-cdr/fhirts";
+import axios from "axios";
 import { FhirDataServiceInstance } from "../services/fhir-data-service";
+import { FhirUtilities } from "../fhir-utilities";
 import { ClaudeServiceInstance } from "../services/claude-service";
 import { ResponseFormatter } from "../services/response-formatter";
 
@@ -226,9 +228,38 @@ class ParseClinicalNotesTool implements IMcpTool {
                   );
                 }
               } else if (attachment.url) {
-                documentTexts.push(
-                  `--- ${docType} (${docDate}) ---\n[Document available at: ${attachment.url}]`,
-                );
+                // Fetch document content from the URL
+                try {
+                  const fhirContext = FhirUtilities.getFhirContext(req);
+                  let downloadUrl = attachment.url;
+
+                  // If relative URL, construct full URL from FHIR server base
+                  if (!downloadUrl.startsWith("http") && fhirContext?.url) {
+                    const baseUrl = fhirContext.url.replace(/\/fhir\/?$/, "");
+                    downloadUrl = `${baseUrl}/${downloadUrl.replace(/^\//, "")}`;
+                  }
+
+                  const headers: Record<string, string> = {};
+                  if (fhirContext?.token) {
+                    headers["Authorization"] = `Bearer ${fhirContext.token}`;
+                  }
+
+                  const response = await axios.get(downloadUrl, {
+                    headers,
+                    timeout: 15000,
+                    responseType: "text",
+                  });
+
+                  const title = attachment.title ?? "Untitled";
+                  documentTexts.push(
+                    `--- ${title} | ${docType} (${docDate}) ---\n${response.data}`,
+                  );
+                } catch (fetchError) {
+                  console.warn("Failed to fetch document from URL:", attachment.url, fetchError instanceof Error ? fetchError.message : fetchError);
+                  documentTexts.push(
+                    `--- ${docType} (${docDate}) ---\n[Document at ${attachment.url} could not be retrieved]`,
+                  );
+                }
               }
             }
           }
