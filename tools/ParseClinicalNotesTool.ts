@@ -252,16 +252,20 @@ class ParseClinicalNotesTool implements IMcpTool {
                     downloadUrl = `${platformBase}/${downloadUrl.replace(/^\//, "")}`;
                   }
 
-                  const headers: Record<string, string> = {};
+                  const headers: Record<string, string> = {
+                    "Accept": "text/plain, application/octet-stream, */*",
+                  };
                   if (fhirContext?.token) {
                     headers["Authorization"] = `Bearer ${fhirContext.token}`;
                   }
+
+                  console.log("Document download URL:", downloadUrl);
+                  console.log("Auth token present:", !!fhirContext?.token);
 
                   const response = await axios.get(downloadUrl, {
                     headers,
                     timeout: 15000,
                     responseType: "text",
-                    maxRedirects: 0,
                   });
 
                   // Verify we got actual document content, not an HTML login page
