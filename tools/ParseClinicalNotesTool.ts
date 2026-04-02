@@ -229,14 +229,27 @@ class ParseClinicalNotesTool implements IMcpTool {
                 }
               } else if (attachment.url) {
                 // Fetch document content from the URL
+                // Per Prompt Opinion docs: use the full platform URL with the FHIR access token
+                // attachment.url is relative like "api/workspaces/{id}/downloads/DocumentReference/{docId}?fileName={file}"
+                // Construct: https://app.promptopinion.ai/{attachment.url}
+                // Auth: Authorization: Bearer {x-fhir-access-token}
                 try {
                   const fhirContext = FhirUtilities.getFhirContext(req);
                   let downloadUrl = attachment.url;
 
-                  // If relative URL, construct full URL from FHIR server base
-                  if (!downloadUrl.startsWith("http") && fhirContext?.url) {
-                    const baseUrl = fhirContext.url.replace(/\/fhir\/?$/, "");
-                    downloadUrl = `${baseUrl}/${downloadUrl.replace(/^\//, "")}`;
+                  if (!downloadUrl.startsWith("http")) {
+                    // Extract platform base URL from the FHIR server URL
+                    // e.g., "https://app.promptopinion.ai/api/workspaces/{id}/fhir" → "https://app.promptopinion.ai"
+                    let platformBase = "https://app.promptopinion.ai";
+                    if (fhirContext?.url) {
+                      try {
+                        const parsed = new URL(fhirContext.url);
+                        platformBase = `${parsed.protocol}//${parsed.host}`;
+                      } catch {
+                        // Use default
+                      }
+                    }
+                    downloadUrl = `${platformBase}/${downloadUrl.replace(/^\//, "")}`;
                   }
 
                   const headers: Record<string, string> = {};
@@ -248,12 +261,22 @@ class ParseClinicalNotesTool implements IMcpTool {
                     headers,
                     timeout: 15000,
                     responseType: "text",
+                    maxRedirects: 0,
                   });
 
-                  const title = attachment.title ?? "Untitled";
-                  documentTexts.push(
-                    `--- ${title} | ${docType} (${docDate}) ---\n${response.data}`,
-                  );
+                  // Verify we got actual document content, not an HTML login page
+                  const data = typeof response.data === "string" ? response.data : "";
+                  if (data.trim().startsWith("<!DOCTYPE") || data.trim().startsWith("<html")) {
+                    console.warn("Document URL returned HTML (auth issue):", attachment.url);
+                    documentTexts.push(
+                      `--- ${docType} (${docDate}) ---\n[Document content not accessible — authentication issue with download endpoint]`,
+                    );
+                  } else {
+                    const title = attachment.title ?? "Untitled";
+                    documentTexts.push(
+                      `--- ${title} | ${docType} (${docDate}) ---\n${data}`,
+                    );
+                  }
                 } catch (fetchError) {
                   console.warn("Failed to fetch document from URL:", attachment.url, fetchError instanceof Error ? fetchError.message : fetchError);
                   documentTexts.push(
