@@ -262,7 +262,8 @@ class ParseClinicalNotesTool implements IMcpTool {
                   console.log("Document download URL:", downloadUrl);
                   console.log("Auth token present:", !!fhirContext?.token);
 
-                  const response = await axios.get(downloadUrl, {
+                  // Per Discord: the download endpoint is a POST, not GET
+                  const response = await axios.post(downloadUrl, {}, {
                     headers,
                     timeout: 15000,
                     responseType: "text",
