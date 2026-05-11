@@ -9,7 +9,6 @@ services:
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: CLAUDE_MODEL
-        value: claude-3-haiku-20240307
       - key: PORT
         value: 5000
       - key: PO_ENV
